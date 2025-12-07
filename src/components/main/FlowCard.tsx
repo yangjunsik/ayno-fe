@@ -20,7 +20,7 @@ const CardContainer = styled.div`
   position: relative;
 
   &:hover {
-    transform: translateY(-5px);
+    transform: translateY(-3px);
   }
 
   &:hover .card-hover-target {
@@ -45,8 +45,8 @@ const GradientOverlay = styled.div`
   top: 0;
   left: 0;
   width: 100%;
-  height: 80px; /* Adjust height as needed */
-  background: linear-gradient(to bottom, rgba(0,0,0,0.7), transparent);
+  height: 70px; /* Increased height for smoother fade, but visually subtle */
+  background: linear-gradient(to bottom, rgba(0,0,0,0.4) 0%, transparent 100%); /* Lighter start opacity */
   opacity: 0;
   transition: opacity 0.3s ease;
   pointer-events: none;
