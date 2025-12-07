@@ -37,11 +37,7 @@ const StyledSectionTitle = styled.h2`
   letter-spacing: -0.5px;
 `;
 
-const SectionDesc = styled.p`
-  font-size: 15px;
-  color: #666;
-  margin-left: 16px;
-`;
+
 
 const Grid = styled.div`
   display: grid;
@@ -114,7 +110,7 @@ const MainPage = () => {
                         <TitleAccent />
                         <StyledSectionTitle>신규 프로젝트</StyledSectionTitle>
                     </TitleRow>
-                    <SectionDesc>따끈따끈한 최신 AI 워크플로우를 만나보세요.</SectionDesc>
+
                 </SectionHeader>
                 {loading ? (
                     <Spinner />
