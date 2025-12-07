@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import { useState } from 'react';
 
 const HeroContainer = styled.section`
   text-align: center;
@@ -53,17 +54,34 @@ const SearchIcon = styled.span`
   font-size: 16px;
 `;
 
-const HeroSection = () => {
-    return (
-        <HeroContainer>
-            <Title>AI 어떻게 사용하세요?</Title>
-            <Subtitle><span>AYNO</span> 에서 AI 사용법을 공유해요!</Subtitle>
-            <SearchContainer>
-                <SearchIcon>🔍</SearchIcon>
-                <SearchInput placeholder="AYNO에서 검색..." />
-            </SearchContainer>
-        </HeroContainer>
-    );
+interface HeroSectionProps {
+  onSearch: (keyword: string) => void;
+}
+
+const HeroSection = ({ onSearch }: HeroSectionProps) => {
+  const [keyword, setKeyword] = useState('');
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      onSearch(keyword);
+    }
+  };
+
+  return (
+    <HeroContainer>
+      <Title>AI 어떻게 사용하세요?</Title>
+      <Subtitle><span>AYNO</span> 에서 AI 사용법을 공유해요!</Subtitle>
+      <SearchContainer>
+        <SearchIcon onClick={() => onSearch(keyword)} style={{ cursor: 'pointer' }}>🔍</SearchIcon>
+        <SearchInput
+          placeholder="AYNO에서 검색..."
+          value={keyword}
+          onChange={(e) => setKeyword(e.target.value)}
+          onKeyDown={handleKeyDown}
+        />
+      </SearchContainer>
+    </HeroContainer>
+  );
 };
 
 export default HeroSection;

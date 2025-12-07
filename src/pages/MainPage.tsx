@@ -7,6 +7,7 @@ const MainContainer = styled.div`
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 20px;
+  min-height: 60vh; /* Ensure footer stays down */
 `;
 
 const SectionTitle = styled.h3`
@@ -31,8 +32,9 @@ const Grid = styled.div`
 `;
 
 import { useEffect, useState } from 'react';
-import { getArtifacts } from '../api/artifact';
+import { getArtifacts, searchArtifacts } from '../api/artifact';
 import type { Artifact } from '../types/artifact';
+import Spinner from '../components/common/Spinner';
 
 // ... (styled components)
 
@@ -40,11 +42,18 @@ const MainPage = () => {
     const [flows, setFlows] = useState<Artifact[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const [searchKeyword, setSearchKeyword] = useState('');
 
     useEffect(() => {
         const fetchArtifacts = async () => {
+            setLoading(true);
             try {
-                const response = await getArtifacts();
+                let response;
+                if (searchKeyword) {
+                    response = await searchArtifacts(searchKeyword);
+                } else {
+                    response = await getArtifacts();
+                }
                 setFlows(response.data.content);
             } catch (err) {
                 setError('Failed to load artifacts');
@@ -55,29 +64,36 @@ const MainPage = () => {
         };
 
         fetchArtifacts();
-    }, []);
+    }, [searchKeyword]);
 
-    if (loading) return <MainContainer>Loading...</MainContainer>;
-    if (error) return <MainContainer>{error}</MainContainer>;
+    const handleSearch = (keyword: string) => {
+        setSearchKeyword(keyword);
+    };
 
     return (
         <>
-            <HeroSection />
+            <HeroSection onSearch={handleSearch} />
             <MainContainer>
                 <SectionTitle>신규 프로젝트</SectionTitle>
-                <Grid>
-                    {flows.map(flow => (
-                        <FlowCard
-                            key={flow.artifactId}
-                            image="" // API doesn't provide image yet, use default
-                            title={flow.artifactTitle}
-                            author="AYNO User" // API doesn't provide author yet
-                            likes={flow.likeCount}
-                            views={flow.viewCount.toLocaleString()}
-                        />
-                    ))}
-                </Grid>
-                <Pagination />
+                {loading ? (
+                    <Spinner />
+                ) : error ? (
+                    <div>{error}</div>
+                ) : (
+                    <Grid>
+                        {flows.map(flow => (
+                            <FlowCard
+                                key={flow.artifactId}
+                                image=""
+                                title={flow.artifactTitle}
+                                author="AYNO User"
+                                likes={flow.likeCount}
+                                views={flow.viewCount.toLocaleString()}
+                            />
+                        ))}
+                    </Grid>
+                )}
+                {!loading && !error && <Pagination />}
             </MainContainer>
         </>
     );
