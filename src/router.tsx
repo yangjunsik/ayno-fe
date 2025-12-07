@@ -2,6 +2,7 @@ import { createBrowserRouter } from 'react-router-dom';
 import { PATH } from './constants/path';
 import App from './App'; // 방금 만든 껍데기 import
 import MainPage from './pages/MainPage';
+import DetailPage from './pages/DetailPage';
 
 export const router = createBrowserRouter([
     {
@@ -12,6 +13,7 @@ export const router = createBrowserRouter([
                 path: PATH.HOME,
                 element: <MainPage />,
             },
+
             {
                 path: PATH.LOGIN,
                 element: <div>Login Page Content</div>,
@@ -19,6 +21,10 @@ export const router = createBrowserRouter([
             {
                 path: PATH.SIGNUP,
                 element: <div>Signup Page Content</div>,
+            },
+            {
+                path: PATH.ARTIFACT_DETAIL,
+                element: <DetailPage />,
             },
         ],
     },

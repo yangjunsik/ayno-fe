@@ -54,6 +54,8 @@ const Grid = styled.div`
 `;
 
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { PATH } from '../constants/path';
 import { getArtifacts, searchArtifacts } from '../api/artifact';
 import type { Artifact } from '../types/artifact';
 import Spinner from '../components/common/Spinner';
@@ -61,6 +63,7 @@ import Spinner from '../components/common/Spinner';
 // ... (styled components)
 
 const MainPage = () => {
+    const navigate = useNavigate();
     const [flows, setFlows] = useState<Artifact[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -126,6 +129,7 @@ const MainPage = () => {
                                 author="AYNO User"
                                 likes={flow.likeCount}
                                 views={flow.viewCount.toLocaleString()}
+                                onClick={() => navigate(PATH.ARTIFACT_DETAIL.replace(':id', flow.artifactId.toString()))}
                             />
                         ))}
                     </Grid>

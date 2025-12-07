@@ -9,6 +9,7 @@ interface FlowCardProps {
   author: string;
   likes: number;
   views: string;
+  onClick?: () => void;
 }
 
 const CardContainer = styled.div`
@@ -123,7 +124,7 @@ const StatItem = styled.span`
   }
 `;
 
-const FlowCard = ({ image, title, author, likes, views }: FlowCardProps) => {
+const FlowCard = ({ image, title, author, likes, views, onClick }: FlowCardProps) => {
   const [imgSrc, setImgSrc] = useState(image || defaultThumbnail);
 
   const handleImageError = () => {
@@ -131,7 +132,7 @@ const FlowCard = ({ image, title, author, likes, views }: FlowCardProps) => {
   };
 
   return (
-    <CardContainer>
+    <CardContainer onClick={onClick}>
       <ImageWrapper>
         <img src={imgSrc} alt={title} onError={handleImageError} />
         <GradientOverlay className="card-hover-target" />
