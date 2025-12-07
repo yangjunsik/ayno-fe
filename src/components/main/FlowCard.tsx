@@ -1,5 +1,6 @@
 import styled from '@emotion/styled';
 import { useState } from 'react';
+import defaultThumbnail from '../../assets/default_thumbnail.png';
 
 interface FlowCardProps {
     image: string;
@@ -116,12 +117,13 @@ const Stats = styled.div`
   text-shadow: 0 1px 3px rgba(0,0,0,0.5);
 `;
 
+
+
 const FlowCard = ({ image, title, author, tags, likes, views }: FlowCardProps) => {
-    const [imgSrc, setImgSrc] = useState(image);
+    const [imgSrc, setImgSrc] = useState(image || defaultThumbnail);
 
     const handleImageError = () => {
-        // Fallback image (gray placeholder)
-        setImgSrc('https://via.placeholder.com/400x250/cccccc/999999?text=No+Image');
+        setImgSrc(defaultThumbnail);
     };
 
     return (

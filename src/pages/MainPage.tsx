@@ -34,7 +34,7 @@ const Grid = styled.div`
 const MOCK_FLOWS = [
     {
         id: 1,
-        image: 'https://via.placeholder.com/400x250/e0e0e0/888888?text=HAVEN',
+        image: '',
         title: '고화질 인트로 영상 제작',
         author: 'LEE Chan Woo',
         tags: ['ChatGPT', 'Adobe Illustrator'],
@@ -43,7 +43,7 @@ const MOCK_FLOWS = [
     },
     {
         id: 2,
-        image: 'https://via.placeholder.com/400x250/ff00ff/ffffff?text=verkopem',
+        image: '',
         title: 'Figam AI로 모바일 UI 만들기',
         author: 'LEE Chan Woo',
         tags: ['ChatGPT', 'CapCut', 'Premiere Pro'],
@@ -52,7 +52,7 @@ const MOCK_FLOWS = [
     },
     {
         id: 3,
-        image: 'https://via.placeholder.com/400x250/000000/ffffff?text=DRZN',
+        image: '',
         title: '미드저니 로고 디자인',
         author: 'LEE Chan Woo',
         tags: ['Figma', 'Blender', 'Adobe Illustrator'],
@@ -61,7 +61,7 @@ const MOCK_FLOWS = [
     },
     {
         id: 4,
-        image: 'https://via.placeholder.com/400x250/000080/ffffff?text=Logo+Design',
+        image: '',
         title: 'UI 목업 작업물 포트폴리오',
         author: 'Midjourney',
         tags: ['Midjourney', 'Adobe Illustrator'],
@@ -70,7 +70,7 @@ const MOCK_FLOWS = [
     },
     {
         id: 5,
-        image: 'https://via.placeholder.com/400x250/333333/ffffff?text=Earpiece',
+        image: '',
         title: 'Chat GPT로 고화질 이미지 만들기',
         author: 'Claro Earpiece',
         tags: ['ChatGPT', 'Midjourney', 'Adobe Illustrator'],
@@ -79,7 +79,7 @@ const MOCK_FLOWS = [
     },
     {
         id: 6,
-        image: 'https://via.placeholder.com/400x250/87ceeb/ffffff?text=House',
+        image: '',
         title: '패키지 디자인 포트폴리오',
         author: 'Chat GPT',
         tags: ['ChatGPT', 'Blender', 'Adobe Illustrator'],
@@ -88,7 +88,7 @@ const MOCK_FLOWS = [
     },
     {
         id: 7,
-        image: 'https://via.placeholder.com/400x250/f5f5dc/000000?text=masty',
+        image: '',
         title: 'GPT와 Midjourney로 하는 그래픽 디자인',
         author: 'masty',
         tags: ['Gemini', 'Adobe Illustrator'],
@@ -97,7 +97,7 @@ const MOCK_FLOWS = [
     },
     {
         id: 8,
-        image: 'https://via.placeholder.com/400x250/ff7f50/ffffff?text=Arch',
+        image: '',
         title: 'Chat GPT 프롬프트로 고화질 그래픽 제작기',
         author: 'GPT Design',
         tags: ['ChatGPT', 'Midjourney', 'Adobe Photoshop'],
@@ -106,7 +106,7 @@ const MOCK_FLOWS = [
     },
     {
         id: 9,
-        image: 'https://via.placeholder.com/400x250/0000ff/ffffff?text=immersy',
+        image: '',
         title: 'GPT 이미지 색보정',
         author: 'immersy',
         tags: ['ChatGPT', 'Adobe Illustrator'],
