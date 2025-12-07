@@ -7,14 +7,40 @@ const MainContainer = styled.div`
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 20px;
-  min-height: 60vh; /* Ensure footer stays down */
 `;
 
-const SectionTitle = styled.h3`
-  font-size: 18px;
-  font-weight: bold;
-  margin-bottom: 20px;
-  margin-top: 40px;
+const SectionHeader = styled.div`
+  margin-top: 60px;
+  margin-bottom: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+`;
+
+const TitleRow = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 12px;
+`;
+
+const TitleAccent = styled.div`
+  width: 4px;
+  height: 28px;
+  background-color: #222;
+  border-radius: 2px;
+`;
+
+const StyledSectionTitle = styled.h2`
+  font-size: 28px;
+  font-weight: 700;
+  color: #111;
+  letter-spacing: -0.5px;
+`;
+
+const SectionDesc = styled.p`
+  font-size: 15px;
+  color: #666;
+  margin-left: 16px;
 `;
 
 const Grid = styled.div`
@@ -43,6 +69,8 @@ const MainPage = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [searchKeyword, setSearchKeyword] = useState('');
+    const [currentPage, setCurrentPage] = useState(0);
+    const [totalPages, setTotalPages] = useState(0);
 
     useEffect(() => {
         const fetchArtifacts = async () => {
@@ -50,11 +78,12 @@ const MainPage = () => {
             try {
                 let response;
                 if (searchKeyword) {
-                    response = await searchArtifacts(searchKeyword);
+                    response = await searchArtifacts(searchKeyword, currentPage);
                 } else {
-                    response = await getArtifacts();
+                    response = await getArtifacts(currentPage);
                 }
                 setFlows(response.data.content);
+                setTotalPages(response.data.totalPages);
             } catch (err) {
                 setError('Failed to load artifacts');
                 console.error(err);
@@ -64,17 +93,29 @@ const MainPage = () => {
         };
 
         fetchArtifacts();
-    }, [searchKeyword]);
+    }, [searchKeyword, currentPage]);
 
     const handleSearch = (keyword: string) => {
         setSearchKeyword(keyword);
+        setCurrentPage(0); // Reset to first page on new search
+    };
+
+    const handlePageChange = (page: number) => {
+        setCurrentPage(page);
+        window.scrollTo(0, 0); // Scroll to top on page change
     };
 
     return (
         <>
             <HeroSection onSearch={handleSearch} />
             <MainContainer>
-                <SectionTitle>신규 프로젝트</SectionTitle>
+                <SectionHeader>
+                    <TitleRow>
+                        <TitleAccent />
+                        <StyledSectionTitle>신규 프로젝트</StyledSectionTitle>
+                    </TitleRow>
+                    <SectionDesc>따끈따끈한 최신 AI 워크플로우를 만나보세요.</SectionDesc>
+                </SectionHeader>
                 {loading ? (
                     <Spinner />
                 ) : error ? (
@@ -93,7 +134,13 @@ const MainPage = () => {
                         ))}
                     </Grid>
                 )}
-                {!loading && !error && <Pagination />}
+                {!loading && !error && (
+                    <Pagination
+                        currentPage={currentPage}
+                        totalPages={totalPages}
+                        onPageChange={handlePageChange}
+                    />
+                )}
             </MainContainer>
         </>
     );

@@ -1,5 +1,6 @@
 import styled from '@emotion/styled';
 import { useState } from 'react';
+import { FiSearch } from 'react-icons/fi';
 
 const HeroContainer = styled.section`
   text-align: center;
@@ -45,13 +46,18 @@ const SearchInput = styled.input`
   }
 `;
 
+
+
 const SearchIcon = styled.span`
   position: absolute;
   left: 20px;
   top: 50%;
   transform: translateY(-50%);
   color: #aaa;
-  font-size: 16px;
+  font-size: 20px; /* Increased size for icon */
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
 
 interface HeroSectionProps {
@@ -72,7 +78,9 @@ const HeroSection = ({ onSearch }: HeroSectionProps) => {
       <Title>AI 어떻게 사용하세요?</Title>
       <Subtitle><span>AYNO</span> 에서 AI 사용법을 공유해요!</Subtitle>
       <SearchContainer>
-        <SearchIcon onClick={() => onSearch(keyword)} style={{ cursor: 'pointer' }}>🔍</SearchIcon>
+        <SearchIcon onClick={() => onSearch(keyword)} style={{ cursor: 'pointer' }}>
+          <FiSearch />
+        </SearchIcon>
         <SearchInput
           placeholder="AYNO에서 검색..."
           value={keyword}

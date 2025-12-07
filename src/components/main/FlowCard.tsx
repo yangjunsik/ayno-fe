@@ -1,6 +1,7 @@
 import styled from '@emotion/styled';
 import { useState } from 'react';
 import defaultThumbnail from '../../assets/default_thumbnail.png';
+import { FiUser, FiThumbsUp, FiEye } from 'react-icons/fi';
 
 interface FlowCardProps {
   image: string;
@@ -29,7 +30,7 @@ const CardContainer = styled.div`
 `;
 
 const ImageWrapper = styled.div`
-  height: 200px;
+  height: 240px; /* Increased height for better proportions */
   background-color: #f0f0f0;
   position: relative;
   
@@ -45,8 +46,8 @@ const GradientOverlay = styled.div`
   top: 0;
   left: 0;
   width: 100%;
-  height: 70px; /* Increased height for smoother fade, but visually subtle */
-  background: linear-gradient(to bottom, rgba(0,0,0,0.4) 0%, transparent 100%); /* Lighter start opacity */
+  height: 80px;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.2) 0%, transparent 100%);
   opacity: 0;
   transition: opacity 0.3s ease;
   pointer-events: none;
@@ -55,38 +56,71 @@ const GradientOverlay = styled.div`
 const Author = styled.div`
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   font-size: 12px;
-  color: #fff;
+  color: #4a4a4a; /* Match Stats color */
   position: absolute;
   top: 15px;
   left: 15px;
-  text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+  text-shadow: 0 0 4px rgba(255, 255, 255, 0.8), 0 0 2px rgba(255, 255, 255, 1);
+  font-weight: 500; /* Match Stats weight */
   opacity: 0;
   transition: opacity 0.3s ease;
   z-index: 10;
+  
+  svg {
+    width: 14px;
+    height: 14px;
+    filter: drop-shadow(0 0 2px rgba(255, 255, 255, 1));
+  }
+`;
+
+const BottomInfo = styled.div`
+  position: absolute;
+  bottom: 15px;
+  left: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px; /* Increased gap for better separation */
+  z-index: 1;
+  width: calc(100% - 30px);
 `;
 
 const Title = styled.h3`
-  font-size: 16px;
-  font-weight: bold;
-  margin-bottom: 0;
-  color: #fff;
-  position: absolute;
-  bottom: 15px; /* Moved to bottom */
-  left: 15px;
-  text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+  font-size: 18px;
+  font-weight: 700; /* Extra bold for emphasis */
+  margin: 0;
+  color: #1a1a1a; /* Slightly darker */
+  text-shadow: 0 0 4px rgba(255, 255, 255, 0.8), 0 0 2px rgba(255, 255, 255, 1);
+  line-height: 1.3;
+  
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 const Stats = styled.div`
-  position: absolute;
-  bottom: 15px;
-  right: 15px;
-  color: #fff;
-  font-size: 10px;
+  color: #4a4a4a; /* Lighter color to push it back in hierarchy */
+  font-size: 12px; /* Restored to standard minimum */
   display: flex;
-  gap: 8px;
-  text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+  align-items: center;
+  gap: 10px;
+  text-shadow: 0 0 4px rgba(255, 255, 255, 0.8), 0 0 2px rgba(255, 255, 255, 1);
+  font-weight: 500;
+`;
+
+const StatItem = styled.span`
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  
+  svg {
+    width: 14px; /* Proportional icon size */
+    height: 14px;
+    margin-bottom: 1px;
+    filter: drop-shadow(0 0 2px rgba(255, 255, 255, 1));
+    opacity: 0.8;
+  }
 `;
 
 const FlowCard = ({ image, title, author, likes, views }: FlowCardProps) => {
@@ -101,12 +135,14 @@ const FlowCard = ({ image, title, author, likes, views }: FlowCardProps) => {
       <ImageWrapper>
         <img src={imgSrc} alt={title} onError={handleImageError} />
         <GradientOverlay className="card-hover-target" />
-        <Author className="card-hover-target">👤 {author}</Author>
-        <Title>{title}</Title>
-        <Stats>
-          <span>👍 {likes}</span>
-          <span>👁 {views}</span>
-        </Stats>
+        <Author className="card-hover-target"><FiUser /> {author}</Author>
+        <BottomInfo>
+          <Title>{title}</Title>
+          <Stats>
+            <StatItem><FiThumbsUp /> {likes}</StatItem>
+            <StatItem><FiEye /> {views}</StatItem>
+          </Stats>
+        </BottomInfo>
       </ImageWrapper>
     </CardContainer>
   );
