@@ -19,7 +19,7 @@ const SectionTitle = styled.h3`
 const Grid = styled.div`
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
+  gap: 40px; /* Increased gap for better spacing */
   
   @media (max-width: 768px) {
     grid-template-columns: repeat(2, 1fr);

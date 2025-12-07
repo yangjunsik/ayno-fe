@@ -13,7 +13,7 @@ interface FlowCardProps {
 const CardContainer = styled.div`
   border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.04); /* Lighter shadow */
   background-color: #fff;
   transition: transform 0.2s;
   cursor: pointer;
