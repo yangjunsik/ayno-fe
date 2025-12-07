@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import { useState } from 'react';
 
 interface FlowCardProps {
     image: string;
@@ -16,9 +17,14 @@ const CardContainer = styled.div`
   background-color: #fff;
   transition: transform 0.2s;
   cursor: pointer;
+  position: relative;
 
   &:hover {
     transform: translateY(-5px);
+  }
+
+  &:hover .card-hover-target {
+    opacity: 1;
   }
 `;
 
@@ -34,6 +40,17 @@ const ImageWrapper = styled.div`
   }
 `;
 
+const GradientOverlay = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 80px; /* Adjust height as needed */
+  background: linear-gradient(to bottom, rgba(0,0,0,0.7), transparent);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+`;
 
 const Author = styled.div`
   display: flex;
@@ -45,6 +62,9 @@ const Author = styled.div`
   top: 15px;
   left: 15px;
   text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 10;
 `;
 
 const Title = styled.h3`
@@ -75,7 +95,7 @@ const Tag = styled.span<{ type: string }>`
   background-color: ${({ type }) => {
         switch (type) {
             case 'ChatGPT': return '#10a37f';
-            case 'Midjourney': return '#3b5998'; // Placeholder blue
+            case 'Midjourney': return '#3b5998';
             case 'Adobe Illustrator': return '#ff9a00';
             case 'Figma': return '#f24e1e';
             case 'Blender': return '#ea7600';
@@ -97,11 +117,19 @@ const Stats = styled.div`
 `;
 
 const FlowCard = ({ image, title, author, tags, likes, views }: FlowCardProps) => {
+    const [imgSrc, setImgSrc] = useState(image);
+
+    const handleImageError = () => {
+        // Fallback image (gray placeholder)
+        setImgSrc('https://via.placeholder.com/400x250/cccccc/999999?text=No+Image');
+    };
+
     return (
         <CardContainer>
             <ImageWrapper>
-                <img src={image} alt={title} />
-                <Author>👤 {author}</Author>
+                <img src={imgSrc} alt={title} onError={handleImageError} />
+                <GradientOverlay className="card-hover-target" />
+                <Author className="card-hover-target">👤 {author}</Author>
                 <Title>{title}</Title>
                 <Tags>
                     {tags.map(tag => (
