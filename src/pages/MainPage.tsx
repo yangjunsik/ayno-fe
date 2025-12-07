@@ -30,107 +30,50 @@ const Grid = styled.div`
   }
 `;
 
-// Mock Data
-const MOCK_FLOWS = [
-    {
-        id: 1,
-        image: '',
-        title: '고화질 인트로 영상 제작',
-        author: 'LEE Chan Woo',
-        tags: ['ChatGPT', 'Adobe Illustrator'],
-        likes: 142,
-        views: '231k'
-    },
-    {
-        id: 2,
-        image: '',
-        title: 'Figam AI로 모바일 UI 만들기',
-        author: 'LEE Chan Woo',
-        tags: ['ChatGPT', 'CapCut', 'Premiere Pro'],
-        likes: 142,
-        views: '231k'
-    },
-    {
-        id: 3,
-        image: '',
-        title: '미드저니 로고 디자인',
-        author: 'LEE Chan Woo',
-        tags: ['Figma', 'Blender', 'Adobe Illustrator'],
-        likes: 142,
-        views: '231k'
-    },
-    {
-        id: 4,
-        image: '',
-        title: 'UI 목업 작업물 포트폴리오',
-        author: 'Midjourney',
-        tags: ['Midjourney', 'Adobe Illustrator'],
-        likes: 142,
-        views: '231k'
-    },
-    {
-        id: 5,
-        image: '',
-        title: 'Chat GPT로 고화질 이미지 만들기',
-        author: 'Claro Earpiece',
-        tags: ['ChatGPT', 'Midjourney', 'Adobe Illustrator'],
-        likes: 142,
-        views: '231k'
-    },
-    {
-        id: 6,
-        image: '',
-        title: '패키지 디자인 포트폴리오',
-        author: 'Chat GPT',
-        tags: ['ChatGPT', 'Blender', 'Adobe Illustrator'],
-        likes: 142,
-        views: '231k'
-    },
-    {
-        id: 7,
-        image: '',
-        title: 'GPT와 Midjourney로 하는 그래픽 디자인',
-        author: 'masty',
-        tags: ['Gemini', 'Adobe Illustrator'],
-        likes: 142,
-        views: '231k'
-    },
-    {
-        id: 8,
-        image: '',
-        title: 'Chat GPT 프롬프트로 고화질 그래픽 제작기',
-        author: 'GPT Design',
-        tags: ['ChatGPT', 'Midjourney', 'Adobe Photoshop'],
-        likes: 142,
-        views: '231k'
-    },
-    {
-        id: 9,
-        image: '',
-        title: 'GPT 이미지 색보정',
-        author: 'immersy',
-        tags: ['ChatGPT', 'Adobe Illustrator'],
-        likes: 142,
-        views: '231k'
-    }
-];
+import { useEffect, useState } from 'react';
+import { getArtifacts } from '../api/artifact';
+import type { Artifact } from '../types/artifact';
+
+// ... (styled components)
 
 const MainPage = () => {
+    const [flows, setFlows] = useState<Artifact[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
+
+    useEffect(() => {
+        const fetchArtifacts = async () => {
+            try {
+                const response = await getArtifacts();
+                setFlows(response.data.content);
+            } catch (err) {
+                setError('Failed to load artifacts');
+                console.error(err);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchArtifacts();
+    }, []);
+
+    if (loading) return <MainContainer>Loading...</MainContainer>;
+    if (error) return <MainContainer>{error}</MainContainer>;
+
     return (
         <>
             <HeroSection />
             <MainContainer>
-                <SectionTitle>신규 플로우</SectionTitle>
+                <SectionTitle>신규 프로젝트</SectionTitle>
                 <Grid>
-                    {MOCK_FLOWS.map(flow => (
+                    {flows.map(flow => (
                         <FlowCard
-                            key={flow.id}
-                            image={flow.image}
-                            title={flow.title}
-                            author={flow.author}
-                            tags={flow.tags}
-                            likes={flow.likes}
-                            views={flow.views}
+                            key={flow.artifactId}
+                            image="" // API doesn't provide image yet, use default
+                            title={flow.artifactTitle}
+                            author="AYNO User" // API doesn't provide author yet
+                            likes={flow.likeCount}
+                            views={flow.viewCount.toLocaleString()}
                         />
                     ))}
                 </Grid>

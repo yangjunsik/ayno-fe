@@ -3,12 +3,11 @@ import { useState } from 'react';
 import defaultThumbnail from '../../assets/default_thumbnail.png';
 
 interface FlowCardProps {
-    image: string;
-    title: string;
-    author: string;
-    tags: string[];
-    likes: number;
-    views: string;
+  image: string;
+  title: string;
+  author: string;
+  likes: number;
+  views: string;
 }
 
 const CardContainer = styled.div`
@@ -71,39 +70,12 @@ const Author = styled.div`
 const Title = styled.h3`
   font-size: 16px;
   font-weight: bold;
-  margin-bottom: 10px;
+  margin-bottom: 0;
   color: #fff;
   position: absolute;
-  bottom: 40px;
+  bottom: 15px; /* Moved to bottom */
   left: 15px;
   text-shadow: 0 1px 3px rgba(0,0,0,0.5);
-`;
-
-const Tags = styled.div`
-  display: flex;
-  gap: 6px;
-  position: absolute;
-  bottom: 15px;
-  left: 15px;
-`;
-
-const Tag = styled.span<{ type: string }>`
-  font-size: 10px;
-  padding: 4px 8px;
-  border-radius: 12px;
-  color: #fff;
-  font-weight: 600;
-  background-color: ${({ type }) => {
-        switch (type) {
-            case 'ChatGPT': return '#10a37f';
-            case 'Midjourney': return '#3b5998';
-            case 'Adobe Illustrator': return '#ff9a00';
-            case 'Figma': return '#f24e1e';
-            case 'Blender': return '#ea7600';
-            case 'Gemini': return '#4285f4';
-            default: return '#333';
-        }
-    }};
 `;
 
 const Stats = styled.div`
@@ -117,34 +89,27 @@ const Stats = styled.div`
   text-shadow: 0 1px 3px rgba(0,0,0,0.5);
 `;
 
+const FlowCard = ({ image, title, author, likes, views }: FlowCardProps) => {
+  const [imgSrc, setImgSrc] = useState(image || defaultThumbnail);
 
+  const handleImageError = () => {
+    setImgSrc(defaultThumbnail);
+  };
 
-const FlowCard = ({ image, title, author, tags, likes, views }: FlowCardProps) => {
-    const [imgSrc, setImgSrc] = useState(image || defaultThumbnail);
-
-    const handleImageError = () => {
-        setImgSrc(defaultThumbnail);
-    };
-
-    return (
-        <CardContainer>
-            <ImageWrapper>
-                <img src={imgSrc} alt={title} onError={handleImageError} />
-                <GradientOverlay className="card-hover-target" />
-                <Author className="card-hover-target">👤 {author}</Author>
-                <Title>{title}</Title>
-                <Tags>
-                    {tags.map(tag => (
-                        <Tag key={tag} type={tag}>{tag}</Tag>
-                    ))}
-                </Tags>
-                <Stats>
-                    <span>👍 {likes}</span>
-                    <span>👁 {views}</span>
-                </Stats>
-            </ImageWrapper>
-        </CardContainer>
-    );
+  return (
+    <CardContainer>
+      <ImageWrapper>
+        <img src={imgSrc} alt={title} onError={handleImageError} />
+        <GradientOverlay className="card-hover-target" />
+        <Author className="card-hover-target">👤 {author}</Author>
+        <Title>{title}</Title>
+        <Stats>
+          <span>👍 {likes}</span>
+          <span>👁 {views}</span>
+        </Stats>
+      </ImageWrapper>
+    </CardContainer>
+  );
 };
 
 export default FlowCard;
