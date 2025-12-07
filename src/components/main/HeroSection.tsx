@@ -1,0 +1,69 @@
+import styled from '@emotion/styled';
+
+const HeroContainer = styled.section`
+  text-align: center;
+  padding: 80px 20px;
+  background-color: #fff;
+`;
+
+const Title = styled.h1`
+  font-size: 32px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: #000;
+`;
+
+const Subtitle = styled.h2`
+  font-size: 32px;
+  font-weight: normal;
+  margin-bottom: 40px;
+  
+  span {
+    color: #a88d8d; /* Muted rose color from image */
+    font-weight: bold;
+  }
+`;
+
+const SearchContainer = styled.div`
+  max-width: 600px;
+  margin: 0 auto;
+  position: relative;
+`;
+
+const SearchInput = styled.input`
+  width: 100%;
+  padding: 15px 20px 15px 50px;
+  border-radius: 30px;
+  border: 1px solid #eee;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  font-size: 14px;
+  outline: none;
+  
+  &::placeholder {
+    color: #aaa;
+  }
+`;
+
+const SearchIcon = styled.span`
+  position: absolute;
+  left: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #aaa;
+  font-size: 16px;
+`;
+
+const HeroSection = () => {
+    return (
+        <HeroContainer>
+            <Title>AI 어떻게 사용하세요?</Title>
+            <Subtitle><span>AYNO</span> 에서 AI 사용법을 공유해요!</Subtitle>
+            <SearchContainer>
+                <SearchIcon>🔍</SearchIcon>
+                <SearchInput placeholder="AYNO에서 검색..." />
+            </SearchContainer>
+        </HeroContainer>
+    );
+};
+
+export default HeroSection;

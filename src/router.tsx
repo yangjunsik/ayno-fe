@@ -1,6 +1,7 @@
 import { createBrowserRouter } from 'react-router-dom';
 import { PATH } from './constants/path';
 import App from './App'; // 방금 만든 껍데기 import
+import MainPage from './pages/MainPage';
 
 export const router = createBrowserRouter([
     {
@@ -9,7 +10,7 @@ export const router = createBrowserRouter([
         children: [ // [이해] App 안에 들어갈 자식들을 배열로 정의
             {
                 path: PATH.HOME,
-                element: <div>Home Page Content</div>,
+                element: <MainPage />,
             },
             {
                 path: PATH.LOGIN,
