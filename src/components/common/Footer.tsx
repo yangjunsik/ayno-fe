@@ -4,7 +4,6 @@ import logo from '../../assets/logo.png';
 const FooterContainer = styled.footer`
   padding: 60px 0; /* Removed horizontal padding */
   background-color: #fff;
-  border-top: 1px solid #eee;
   font-size: 12px;
   color: #333;
 `;

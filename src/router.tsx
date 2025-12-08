@@ -26,6 +26,10 @@ export const router = createBrowserRouter([
                 path: PATH.ARTIFACT_DETAIL,
                 element: <DetailPage />,
             },
+            {
+                path: PATH.WRITE,
+                element: <div>Write Page Content</div>,
+            },
         ],
     },
 ]);

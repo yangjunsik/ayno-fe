@@ -12,6 +12,7 @@ const style = css`
     width: 100%;
     height: 100%;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    background-color: #F9FAFB; /* User requested background color */
   }
 
   ul,
@@ -32,7 +33,7 @@ const style = css`
 `;
 
 const GlobalStyle = () => {
-    return <Global styles={style} />;
+  return <Global styles={style} />;
 };
 
 export default GlobalStyle;

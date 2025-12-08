@@ -10,7 +10,6 @@ const HeaderContainer = styled.header`
   height: 60px;
   padding: 0;
   background-color: #fff;
-  border-bottom: 1px solid #eee;
   position: sticky;
   top: 0;
   z-index: 1000;

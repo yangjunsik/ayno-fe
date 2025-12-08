@@ -59,16 +59,36 @@ const Separator = styled.span`
   transform: translateY(-1px); /* Visual correction for vertical alignment */
 `;
 
+import { keyframes } from '@emotion/react';
+
+const fadeIn = keyframes`
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+`;
+
 const Grid = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fit, 430px);
   justify-content: start; /* Align grid with title */
   gap: 40px;
+  animation: ${fadeIn} 0.5s ease-out;
   
   @media (max-width: 480px) {
     grid-template-columns: 1fr;
     justify-content: center;
   }
+`;
+
+const ContentWrapper = styled.div`
+  min-height: 600px; /* Ensure content area doesn't collapse during loading */
+  display: flex;
+  flex-direction: column;
 `;
 
 import { useEffect, useState } from 'react';
@@ -145,25 +165,27 @@ const MainPage = () => {
                         </SortButton>
                     </SortContainer>
                 </SectionHeader>
-                {loading ? (
-                    <Spinner />
-                ) : error ? (
-                    <div>{error}</div>
-                ) : (
-                    <Grid>
-                        {flows.map(flow => (
-                            <FlowCard
-                                key={flow.artifactId}
-                                image=""
-                                title={flow.artifactTitle}
-                                author="AYNO User"
-                                likes={flow.likeCount}
-                                views={flow.viewCount.toLocaleString()}
-                                onClick={() => navigate(PATH.ARTIFACT_DETAIL.replace(':id', flow.artifactId.toString()))}
-                            />
-                        ))}
-                    </Grid>
-                )}
+                <ContentWrapper>
+                    {loading ? (
+                        <Spinner />
+                    ) : error ? (
+                        <div>{error}</div>
+                    ) : (
+                        <Grid key={`${sort}-${currentPage}-${searchKeyword}`}>
+                            {flows.map(flow => (
+                                <FlowCard
+                                    key={flow.artifactId}
+                                    image=""
+                                    title={flow.artifactTitle}
+                                    author="AYNO User"
+                                    likes={flow.likeCount}
+                                    views={flow.viewCount.toLocaleString()}
+                                    onClick={() => navigate(PATH.ARTIFACT_DETAIL.replace(':id', flow.artifactId.toString()))}
+                                />
+                            ))}
+                        </Grid>
+                    )}
+                </ContentWrapper>
                 {!loading && !error && (
                     <Pagination
                         currentPage={currentPage}
