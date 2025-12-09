@@ -177,7 +177,8 @@ const MainPage = () => {
                                     key={flow.artifactId}
                                     image=""
                                     title={flow.artifactTitle}
-                                    author="AYNO User"
+                                    author={flow.nickname}
+                                    authorImage={flow.profileImageUrl}
                                     likes={flow.likeCount}
                                     views={flow.viewCount.toLocaleString()}
                                     onClick={() => navigate(PATH.ARTIFACT_DETAIL.replace(':id', flow.artifactId.toString()))}

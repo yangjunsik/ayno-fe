@@ -7,6 +7,7 @@ interface FlowCardProps {
   image: string;
   title: string;
   author: string;
+  authorImage?: string;
   likes: number;
   views: string;
   onClick?: () => void;
@@ -77,10 +78,15 @@ const Author = styled.div`
   transition: all 0.3s ease;
   z-index: 10;
   
-  svg {
+  svg, img {
     width: 30px; /* Increased to 30px */
     height: 30px; /* Increased to 30px */
     filter: drop-shadow(0 1px 2px rgba(0,0,0,0.3));
+  }
+  
+  img {
+    border-radius: 50%;
+    object-fit: cover;
   }
 `;
 
@@ -123,7 +129,7 @@ const StatItem = styled.div`
   }
 `;
 
-const FlowCard = ({ image, title, author, likes, views, onClick }: FlowCardProps) => {
+const FlowCard = ({ image, title, author, authorImage, likes, views, onClick }: FlowCardProps) => {
   const [imgSrc, setImgSrc] = useState(image || defaultThumbnail);
 
   const handleImageError = () => {
@@ -135,7 +141,10 @@ const FlowCard = ({ image, title, author, likes, views, onClick }: FlowCardProps
       <ImageWrapper>
         <img src={imgSrc} alt={title} onError={handleImageError} />
         <GradientOverlay className="card-hover-target" />
-        <Author className="card-hover-target"><FiUser /> {author}</Author>
+        <Author className="card-hover-target">
+          {authorImage ? <img src={authorImage} alt={author} /> : <FiUser />}
+          {author}
+        </Author>
       </ImageWrapper>
       <ContentWrapper>
         <Title>{title}</Title>
