@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FiSearch } from 'react-icons/fi';
-import logo from '../../assets/logo.png';
+import logo from '../../assets/logo_hero.svg';
 import writeIcon from '../../assets/write.png';
 import { PATH } from '../../constants/path';
 
@@ -13,26 +13,18 @@ const HeroContainer = styled.section`
   /* Actually, looking at the image, the background IS white. The user might be asking to CHANGE it to gray. So I should probably remove the white background here. */
 `;
 
-const Title = styled.h1`
-  font-size: 36px;
-  font-weight: bold;
-  margin-bottom: 10px;
-  color: #000;
+const LogoImage = styled.img`
+  width: 160px;
+  height: 43px;
+  object-fit: contain;
+  margin-bottom: 20px;
 `;
 
 const Subtitle = styled.h2`
-  font-size: 36px;
-  font-weight: normal;
+  font-size: 30px;
+  font-weight: bold;
   margin-bottom: 40px;
-  display: flex; /* Added display: flex */
-  align-items: center;
-  justify-content: center;
-  gap: 10px; /* Added gap */
-  
-  span {
-    color: #a88d8d;
-    font-weight: bold;
-  }
+  color: #000;
 `;
 
 const SearchWrapper = styled.div`
@@ -52,8 +44,8 @@ const SearchContainer = styled.div`
 
 const SearchInput = styled.input`
   width: 100%;
-  height: 56px; /* Updated height */
-  padding: 0 20px 0 60px; /* Adjusted padding for vertical centering */
+  height: 60px;
+  padding: 0 20px 0 60px; 
   border-radius: 30px;
   border: none;
   box-shadow: 0 4px 15px rgba(0,0,0,0.1);
@@ -78,8 +70,8 @@ const SearchIcon = styled.span`
 `;
 
 const WriteButton = styled.button`
-  width: 56px;
-  height: 56px;
+  width: 60px;
+  height: 60px;
   border-radius: 50%; /* Circle shape as seen in image */
   background-color: #fff;
   box-shadow: 0 4px 15px rgba(0,0,0,0.1);
@@ -134,8 +126,8 @@ const HeroSection = ({ onSearch }: HeroSectionProps) => {
 
   return (
     <HeroContainer>
-      <Title>AI 어떻게 사용하세요?</Title>
-      <Subtitle><img src={logo} alt="AYNO" style={{ height: '32px', width: 'auto', objectFit: 'contain' }} /> 에서 AI 사용법을 공유해요!</Subtitle>
+      <LogoImage src={logo} alt="AYNO" />
+      <Subtitle>AI활용 과정을 공유하세요</Subtitle>
       <SearchWrapper>
         <SearchContainer>
           <SearchIcon onClick={() => onSearch(keyword)} style={{ cursor: 'pointer' }}>

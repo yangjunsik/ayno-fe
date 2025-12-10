@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import logo from '../../assets/logo.png';
+import logo from '../../assets/logo_footer.svg';
 
 const FooterContainer = styled.footer`
   padding: 60px 0; /* Removed horizontal padding */
@@ -22,13 +22,11 @@ const TopRow = styled.div`
   align-items: flex-start;
 `;
 
-const Logo = styled.div`
-  margin-bottom: 20px;
-  
-  img {
-    height: 24px; /* Reduced from 30px */
-    object-fit: contain;
-  }
+const Logo = styled.img`
+  width: 112px;
+  height: 30px;
+  object-fit: contain;
+  margin-bottom: 10px;
 `;
 
 const Links = styled.div`
@@ -47,7 +45,7 @@ const Footer = () => {
     <FooterContainer>
       <FooterContent>
         <TopRow>
-          <Logo><img src={logo} alt="AYNO" /></Logo>
+          <Logo src={logo} alt="AYNO" />
           <Links>
             <span>기업소개</span>
             <span>인스타그램</span>
