@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 import { Link } from 'react-router-dom';
 import { PATH } from '../../constants/path';
-import logo from '../../assets/logo.png';
+import logo from '../../assets/logo_header.svg';
 
 const HeaderContainer = styled.header`
   display: flex;
@@ -23,10 +23,11 @@ const InnerContainer = styled.div`
   align-items: center;
 `;
 
-const Logo = styled(Link)`
-  display: flex;
-  align-items: center;
-  height: 40px;
+const Logo = styled.img`
+  width: 56px;
+  height: 15px;
+  object-fit: contain;
+  cursor: pointer;
 `;
 
 const Nav = styled.nav`
@@ -46,9 +47,9 @@ const Header = () => {
   return (
     <HeaderContainer>
       <InnerContainer>
-        <Logo to={PATH.HOME}>
-          <img src={logo} alt="AYNO" width="76" height="40" style={{ objectFit: 'contain' }} />
-        </Logo>
+        <Link to={PATH.HOME}>
+          <Logo src={logo} alt="AYNO" />
+        </Link>
         <Nav>
           <LoginLink to={PATH.LOGIN}>로그인</LoginLink>
         </Nav>

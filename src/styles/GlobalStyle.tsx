@@ -12,7 +12,7 @@ const style = css`
     width: 100%;
     height: 100%;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-    background-color: #F9FAFB; /* User requested background color */
+    background-color: #F9FAFB;
   }
 
   ul,
