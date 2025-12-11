@@ -12,7 +12,7 @@ const notifyListeners = () => {
 
 export const useAuth = () => {
     const [user, setUser] = useState<User | null>(globalUser);
-    const [isLoading, setIsLoading] = useState(!globalUser); // Initial load state
+    const [isLoading, setIsLoading] = useState(!globalUser);
 
     useEffect(() => {
         const listener = (newUser: User | null) => {
@@ -21,7 +21,6 @@ export const useAuth = () => {
         };
         listeners.add(listener);
 
-        // Initial check if not already loaded
         if (!globalUser) {
             checkAuth();
         } else {

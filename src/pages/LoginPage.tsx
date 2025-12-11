@@ -216,7 +216,8 @@ const LoginPage = () => {
     };
 
     const handleKakaoLogin = () => {
-        alert('카카오 로그인 준비 중입니다.');
+        const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080';
+        window.location.href = `${API_URL}/oauth2/authorization/kakao`;
     };
 
     const handleGoogleLogin = () => {
