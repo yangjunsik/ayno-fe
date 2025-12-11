@@ -1,7 +1,9 @@
 import styled from '@emotion/styled';
 import { Link } from 'react-router-dom';
-import { PATH } from '../../constants/path';
+import { PATH } from '../../routes/constants/path';
 import logo from '../../assets/logo_header.svg';
+import { useAuth } from '../../hooks/useAuth';
+import { FaUserCircle } from 'react-icons/fa';
 
 const HeaderContainer = styled.header`
   display: flex;
@@ -32,6 +34,8 @@ const Logo = styled.img`
 
 const Nav = styled.nav`
   display: flex;
+  align-items: center;
+  gap: 16px;
 `;
 
 const LoginLink = styled(Link)`
@@ -43,7 +47,24 @@ const LoginLink = styled(Link)`
   }
 `;
 
+const UserProfile = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 500;
+`;
+
+const ProfileImage = styled.img`
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+`;
+
 const Header = () => {
+  const { user, isLoggedIn } = useAuth();
+
   return (
     <HeaderContainer>
       <InnerContainer>
@@ -51,7 +72,18 @@ const Header = () => {
           <Logo src={logo} alt="AYNO" />
         </Link>
         <Nav>
-          <LoginLink to={PATH.LOGIN}>로그인</LoginLink>
+          {isLoggedIn && user ? (
+            <UserProfile>
+              {user.profileImageUrl ? (
+                <ProfileImage src={user.profileImageUrl} alt={user.nickname} />
+              ) : (
+                <FaUserCircle size={32} color="#ccc" />
+              )}
+              <span>{user.nickname}</span>
+            </UserProfile>
+          ) : (
+            <LoginLink to={PATH.LOGIN}>로그인</LoginLink>
+          )}
         </Nav>
       </InnerContainer>
     </HeaderContainer>

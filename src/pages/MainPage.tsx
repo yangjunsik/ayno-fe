@@ -93,7 +93,7 @@ const ContentWrapper = styled.div`
 
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { PATH } from '../constants/path';
+import { PATH } from '../routes/constants/path';
 import { getArtifacts, searchArtifacts } from '../api/artifact';
 import type { Artifact } from '../types/artifact';
 import Spinner from '../components/common/Spinner';
@@ -101,102 +101,102 @@ import Spinner from '../components/common/Spinner';
 // ... (styled components)
 
 const MainPage = () => {
-    const navigate = useNavigate();
-    const [flows, setFlows] = useState<Artifact[]>([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
-    const [searchKeyword, setSearchKeyword] = useState('');
-    const [currentPage, setCurrentPage] = useState(0);
-    const [totalPages, setTotalPages] = useState(0);
-    const [sort, setSort] = useState('createdAt,desc');
+  const navigate = useNavigate();
+  const [flows, setFlows] = useState<Artifact[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [searchKeyword, setSearchKeyword] = useState('');
+  const [currentPage, setCurrentPage] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
+  const [sort, setSort] = useState('createdAt,desc');
 
-    useEffect(() => {
-        const fetchArtifacts = async () => {
-            setLoading(true);
-            try {
-                let response;
-                if (searchKeyword) {
-                    response = await searchArtifacts(searchKeyword, currentPage, 12, sort);
-                } else {
-                    response = await getArtifacts(currentPage, 12, sort);
-                }
-                setFlows(response.data.content);
-                setTotalPages(response.data.totalPages);
-            } catch (err) {
-                setError('Failed to load artifacts');
-                console.error(err);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchArtifacts();
-    }, [searchKeyword, currentPage, sort]);
-
-    const handleSearch = (keyword: string) => {
-        setSearchKeyword(keyword);
-        setCurrentPage(0); // Reset to first page on new search
+  useEffect(() => {
+    const fetchArtifacts = async () => {
+      setLoading(true);
+      try {
+        let response;
+        if (searchKeyword) {
+          response = await searchArtifacts(searchKeyword, currentPage, 12, sort);
+        } else {
+          response = await getArtifacts(currentPage, 12, sort);
+        }
+        setFlows(response.data.content);
+        setTotalPages(response.data.totalPages);
+      } catch (err) {
+        setError('Failed to load artifacts');
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
     };
 
-    const handlePageChange = (page: number) => {
-        setCurrentPage(page);
-        window.scrollTo(0, 0); // Scroll to top on page change
-    };
+    fetchArtifacts();
+  }, [searchKeyword, currentPage, sort]);
 
-    return (
-        <>
-            <HeroSection onSearch={handleSearch} />
-            <MainContainer>
-                <SectionHeader>
-                    <StyledSectionTitle>신규 플로우</StyledSectionTitle>
-                    <SortContainer>
-                        <SortButton
-                            active={sort === 'likeCount,desc'}
-                            onClick={() => setSort('likeCount,desc')}
-                        >
-                            인기순
-                        </SortButton>
-                        <Separator>|</Separator>
-                        <SortButton
-                            active={sort === 'createdAt,desc'}
-                            onClick={() => setSort('createdAt,desc')}
-                        >
-                            최신순
-                        </SortButton>
-                    </SortContainer>
-                </SectionHeader>
-                <ContentWrapper>
-                    {loading ? (
-                        <Spinner />
-                    ) : error ? (
-                        <div>{error}</div>
-                    ) : (
-                        <Grid key={`${sort}-${currentPage}-${searchKeyword}`}>
-                            {flows.map(flow => (
-                                <FlowCard
-                                    key={flow.artifactId}
-                                    image={flow.thumbnailUrl}
-                                    title={flow.artifactTitle}
-                                    author={flow.nickname}
-                                    authorImage={flow.profileImageUrl}
-                                    likes={flow.likeCount}
-                                    views={flow.viewCount.toLocaleString()}
-                                    onClick={() => navigate(PATH.ARTIFACT_DETAIL.replace(':id', flow.artifactId.toString()))}
-                                />
-                            ))}
-                        </Grid>
-                    )}
-                </ContentWrapper>
-                {!loading && !error && (
-                    <Pagination
-                        currentPage={currentPage}
-                        totalPages={totalPages}
-                        onPageChange={handlePageChange}
-                    />
-                )}
-            </MainContainer>
-        </>
-    );
+  const handleSearch = (keyword: string) => {
+    setSearchKeyword(keyword);
+    setCurrentPage(0); // Reset to first page on new search
+  };
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+    window.scrollTo(0, 0); // Scroll to top on page change
+  };
+
+  return (
+    <>
+      <HeroSection onSearch={handleSearch} />
+      <MainContainer>
+        <SectionHeader>
+          <StyledSectionTitle>신규 플로우</StyledSectionTitle>
+          <SortContainer>
+            <SortButton
+              active={sort === 'likeCount,desc'}
+              onClick={() => setSort('likeCount,desc')}
+            >
+              인기순
+            </SortButton>
+            <Separator>|</Separator>
+            <SortButton
+              active={sort === 'createdAt,desc'}
+              onClick={() => setSort('createdAt,desc')}
+            >
+              최신순
+            </SortButton>
+          </SortContainer>
+        </SectionHeader>
+        <ContentWrapper>
+          {loading ? (
+            <Spinner />
+          ) : error ? (
+            <div>{error}</div>
+          ) : (
+            <Grid key={`${sort}-${currentPage}-${searchKeyword}`}>
+              {flows.map(flow => (
+                <FlowCard
+                  key={flow.artifactId}
+                  image={flow.thumbnailUrl}
+                  title={flow.artifactTitle}
+                  author={flow.nickname}
+                  authorImage={flow.profileImageUrl}
+                  likes={flow.likeCount}
+                  views={flow.viewCount.toLocaleString()}
+                  onClick={() => navigate(PATH.ARTIFACT_DETAIL.replace(':id', flow.artifactId.toString()))}
+                />
+              ))}
+            </Grid>
+          )}
+        </ContentWrapper>
+        {!loading && !error && (
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={handlePageChange}
+          />
+        )}
+      </MainContainer>
+    </>
+  );
 };
 
 export default MainPage;

@@ -13,10 +13,11 @@ client.interceptors.response.use(
   (response) => response,
   async (error) => {
     // 1. 401 Unauthorized: 토큰 만료 혹은 로그인 풀림
-    if (error.response?.status === 401) {
-      // 강제로 로그인 페이지로 이동시킴 (새로고침 효과)
-      window.location.href = '/login';
-    }
+    // 1. 401 Unauthorized: 토큰 만료 혹은 로그인 풀림
+    // if (error.response?.status === 401 && window.location.pathname !== '/login') {
+    //   // 강제로 로그인 페이지로 이동시킴 (새로고침 효과)
+    //   window.location.href = '/login';
+    // }
 
     // 2. 403 Forbidden: 권한 없음
     if (error.response?.status === 403) {

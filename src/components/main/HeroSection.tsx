@@ -4,7 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import { FiSearch } from 'react-icons/fi';
 import logo from '../../assets/logo_hero.svg';
 import writeIcon from '../../assets/write.png';
-import { PATH } from '../../constants/path';
+import { PATH } from '../../routes/constants/path';
+import { useAuth } from '../../hooks/useAuth';
 
 const HeroContainer = styled.section`
   text-align: center;
@@ -98,6 +99,7 @@ interface HeroSectionProps {
 const HeroSection = ({ onSearch }: HeroSectionProps) => {
   const [keyword, setKeyword] = useState('');
   const navigate = useNavigate();
+  const { isLoggedIn } = useAuth();
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
@@ -106,17 +108,6 @@ const HeroSection = ({ onSearch }: HeroSectionProps) => {
   };
 
   const handleWriteClick = () => {
-    // Helper to check for auth cookie
-    // Note: This requires the accessToken cookie to be accessible to JS (not HttpOnly).
-    // If it is HttpOnly, we should rely on an API call or global state.
-    const getCookie = (name: string) => {
-      const value = `; ${document.cookie}`;
-      const parts = value.split(`; ${name}=`);
-      if (parts.length === 2) return parts.pop()?.split(';').shift();
-    };
-
-    const isLoggedIn = !!getCookie('accessToken');
-
     if (isLoggedIn) {
       navigate(PATH.WRITE);
     } else {
