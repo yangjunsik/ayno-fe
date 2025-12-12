@@ -21,7 +21,7 @@ function App() {
         {/* 2. [핵심] Outlet: 여기가 바로 URL에 따라 내용이 갈아 끼워지는 '구멍'입니다. */}
         <Outlet />
       </StyledMain>
-      {!isLoginPage && <Footer />}
+      {!isLoginPage && location.pathname !== PATH.SIGNUP && <Footer />}
     </div >
   );
 }
