@@ -4,6 +4,7 @@ import App from '../App';
 import MainPage from '../pages/MainPage';
 import DetailPage from '../pages/DetailPage';
 import LoginPage from '../pages/LoginPage';
+import SignupPage from '../pages/SignupPage';
 import PrivateRoute from './PrivateRoute';
 
 export const router = createBrowserRouter([
@@ -21,7 +22,7 @@ export const router = createBrowserRouter([
             },
             {
                 path: PATH.SIGNUP,
-                element: <div>Signup Page Content</div>,
+                element: <SignupPage />,
             },
             {
                 path: PATH.ARTIFACT_DETAIL,
