@@ -1,10 +1,11 @@
 import styled from '@emotion/styled';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FiEye, FiEyeOff, FiChevronRight } from 'react-icons/fi';
+import { FiEye, FiEyeOff, FiChevronRight, FiCheck } from 'react-icons/fi';
 import logo from '../assets/logo_hero.svg';
 import { PATH } from '../routes/constants/path';
 import { signup, checkUsername } from '../api/auth';
+import { useToast } from '../contexts/ToastContext';
 
 const Container = styled.div`
   display: flex;
@@ -59,25 +60,29 @@ const Input = styled.input<{ hasError?: boolean }>`
   }
 `;
 
-const DuplicateCheckButton = styled.button`
+const DuplicateCheckButton = styled.button<{ isChecked?: boolean }>`
   position: absolute;
   right: 12px;
   top: 50%;
   transform: translateY(-50%);
-  color: #9CA3AF;
+  color: ${({ isChecked }) => (isChecked ? '#10B981' : '#9CA3AF')};
   font-size: 13px;
   background: none;
   border: none;
-  cursor: pointer;
+  cursor: ${({ isChecked }) => (isChecked ? 'default' : 'pointer')};
   padding: 0;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-weight: ${({ isChecked }) => (isChecked ? '600' : '400')};
 
   &:hover {
-    color: #666;
+    color: ${({ isChecked }) => (isChecked ? '#10B981' : '#666')};
   }
   
   &:disabled {
     cursor: not-allowed;
-    color: #D1D5DB;
+    color: ${({ isChecked }) => (isChecked ? '#10B981' : '#D1D5DB')};
   }
 `;
 
@@ -191,6 +196,7 @@ const SignupButton = styled.button`
 
 const SignupPage = () => {
     const navigate = useNavigate();
+    const { addToast } = useToast();
 
     // Form State
     const [email, setEmail] = useState('');
@@ -231,7 +237,7 @@ const SignupPage = () => {
             if (response.data?.available) {
                 setIsEmailChecked(true);
                 setEmailError('');
-                alert('사용 가능한 이메일입니다.');
+                // No alert needed, UI update handles it
             } else {
                 setIsEmailChecked(false);
                 setEmailError('이미 사용 중인 이메일입니다.');
@@ -296,11 +302,11 @@ const SignupPage = () => {
                 password,
                 marketingAgreed: agreements.marketing,
             });
-            alert('회원가입이 완료되었습니다! 로그인해주세요.');
+            addToast('회원가입이 완료!', 'success');
             navigate(PATH.LOGIN);
         } catch (error: any) {
             console.error('Signup failed:', error);
-            alert(error.response?.data?.errorMessage || '회원가입에 실패했습니다.');
+            addToast(error.response?.data?.errorMessage || '회원가입에 실패', 'error');
         }
     };
 
@@ -326,8 +332,16 @@ const SignupPage = () => {
                         <DuplicateCheckButton
                             onClick={handleCheckEmail}
                             disabled={!email || isEmailChecked}
+                            isChecked={isEmailChecked}
                         >
-                            중복확인
+                            {isEmailChecked ? (
+                                <>
+                                    <FiCheck />
+                                    확인완료
+                                </>
+                            ) : (
+                                '중복확인'
+                            )}
                         </DuplicateCheckButton>
                     </InputWrapper>
                     {emailError && <ErrorMessage>{emailError}</ErrorMessage>}
