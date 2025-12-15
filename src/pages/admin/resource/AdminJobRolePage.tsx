@@ -10,7 +10,7 @@ const AdminJobRolePage = () => {
             getFn={getJobRoles}
             addFn={addJobRole}
             deleteFn={deleteJobRole}
-            mapItem={(item) => ({ id: item.jobRoleId, name: item.jobRoleName })}
+            mapItem={(item) => ({ id: item.jobRoleId, name: item.jobRoleLabel })}
         />
     );
 };

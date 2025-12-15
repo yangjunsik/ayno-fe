@@ -5,7 +5,7 @@ export interface Interest {
 
 export interface JobRole {
     jobRoleId: number;
-    jobRoleName: string;
+    jobRoleLabel: string;
 }
 
 export interface Tool {

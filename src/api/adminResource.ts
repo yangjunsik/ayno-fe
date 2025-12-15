@@ -20,12 +20,12 @@ export const deleteInterest = async (interestId: number) => {
 
 // Job Roles
 export const getJobRoles = async () => {
-    const response = await client.get<ApiResponse<JobRole[]>>('/api/admin/jobs');
+    const response = await client.get<ApiResponse<JobRole[]>>('/api/jobs');
     return response.data;
 };
 
-export const addJobRole = async (jobRoleName: string) => {
-    const response = await client.post<ApiResponse<JobRole>>('/api/admin/jobs', { jobRoleName });
+export const addJobRole = async (jobRoleLabel: string) => {
+    const response = await client.post<ApiResponse<JobRole>>('/api/admin/jobs', { jobRoleLabel });
     return response.data;
 };
 
