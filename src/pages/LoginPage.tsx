@@ -181,126 +181,126 @@ const SignupLink = styled.div`
 `;
 
 const LoginPage = () => {
-    const navigate = useNavigate();
-    const { login: authLogin } = useAuth();
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [showPassword, setShowPassword] = useState(false);
-    const [errorMessage, setErrorMessage] = useState('');
+  const navigate = useNavigate();
+  const { login: authLogin } = useAuth();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
-    const handleLogin = async () => {
-        setErrorMessage(''); // Reset error
+  const handleLogin = async () => {
+    setErrorMessage(''); // Reset error
 
-        if (!email || !password) {
-            setErrorMessage('이메일과 비밀번호를 모두 입력해주세요.');
-            return;
-        }
+    if (!email || !password) {
+      setErrorMessage('이메일과 비밀번호를 모두 입력해주세요.');
+      return;
+    }
 
-        try {
-            await login({ username: email, password });
+    try {
+      await login({ username: email, password });
 
-            // Login success: Fetch user profile
-            const response = await getMyProfile();
-            if (response.data) {
-                authLogin(response.data);
-                navigate(PATH.HOME);
-            } else {
-                // Fallback if no data
-                navigate(PATH.HOME);
-            }
-        } catch (error: any) {
-            console.error('Login failed:', error);
-            const message = error.response?.data?.errorMessage || '아이디 또는 비밀번호가 일치하지 않습니다.';
-            setErrorMessage(message);
-        }
-    };
+      // Login success: Fetch user profile
+      const response = await getMyProfile();
+      if (response.data) {
+        authLogin(response.data);
+        navigate(PATH.HOME);
+      } else {
+        // Fallback if no data
+        navigate(PATH.HOME);
+      }
+    } catch (error: any) {
+      console.error('Login failed:', error);
+      const message = error.response?.data?.errorMessage || '아이디 또는 비밀번호가 일치하지 않습니다.';
+      setErrorMessage(message);
+    }
+  };
 
-    const handleKakaoLogin = () => {
-        const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080';
-        window.location.href = `${API_URL}/oauth2/authorization/kakao`;
-    };
+  const handleKakaoLogin = () => {
+    const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080';
+    window.location.href = `${API_URL}/oauth2/authorization/kakao`;
+  };
 
-    const handleGoogleLogin = () => {
-        alert('구글 로그인 준비 중입니다.');
-    };
+  const handleGoogleLogin = () => {
+    alert('구글 로그인 준비 중입니다.');
+  };
 
-    return (
-        <Container>
-            <Logo src={logo} alt="AYNO" />
+  return (
+    <Container>
+      <Logo src={logo} alt="AYNO" />
 
-            <FormContainer>
-                <InputGroup>
-                    <InputWrapper>
-                        <Input
-                            type="email"
-                            placeholder="이메일을 입력해주세요"
-                            value={email}
-                            onChange={(e) => {
-                                setEmail(e.target.value);
-                            }}
-                            hasError={!!errorMessage}
-                        />
-                    </InputWrapper>
-                </InputGroup>
+      <FormContainer>
+        <InputGroup>
+          <InputWrapper>
+            <Input
+              type="email"
+              placeholder="이메일을 입력해주세요"
+              value={email}
+              onChange={(e) => {
+                setEmail(e.target.value);
+              }}
+              hasError={!!errorMessage}
+            />
+          </InputWrapper>
+        </InputGroup>
 
-                <InputGroup>
-                    <InputWrapper>
-                        <Input
-                            type={showPassword ? 'text' : 'password'}
-                            placeholder="비밀번호를 입력해주세요"
-                            value={password}
-                            onChange={(e) => {
-                                setPassword(e.target.value);
-                            }}
-                            onKeyDown={(e) => {
-                                if (e.key === 'Enter') handleLogin();
-                            }}
-                            hasError={!!errorMessage}
-                        />
-                        <TogglePasswordButton onClick={() => setShowPassword(!showPassword)} type="button">
-                            {showPassword ? <FiEyeOff /> : <FiEye />}
-                        </TogglePasswordButton>
-                    </InputWrapper>
-                </InputGroup>
+        <InputGroup>
+          <InputWrapper>
+            <Input
+              type={showPassword ? 'text' : 'password'}
+              placeholder="비밀번호를 입력해주세요"
+              value={password}
+              onChange={(e) => {
+                setPassword(e.target.value);
+              }}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') handleLogin();
+              }}
+              hasError={!!errorMessage}
+            />
+            <TogglePasswordButton onClick={() => setShowPassword(!showPassword)} type="button">
+              {showPassword ? <FiEyeOff /> : <FiEye />}
+            </TogglePasswordButton>
+          </InputWrapper>
+        </InputGroup>
 
-                {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
+        {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
 
-                <LoginButton onClick={handleLogin}>
-                    로그인
-                </LoginButton>
-            </FormContainer>
+        <LoginButton onClick={handleLogin}>
+          로그인
+        </LoginButton>
+      </FormContainer>
 
-            <Divider>또는</Divider>
+      <Divider>또는</Divider>
 
-            <FormContainer>
-                {/* Kakao Standard: #FEE500 background, #191919 text */}
-                <SocialButton
-                    bgColor="#FEE500"
-                    textColor="#191919"
-                    onClick={handleKakaoLogin}
-                >
-                    <RiKakaoTalkFill style={{ fontSize: '24px' }} />
-                    카카오 로그인
-                </SocialButton>
+      <FormContainer>
+        {/* Kakao Standard: #FEE500 background, #191919 text */}
+        <SocialButton
+          bgColor="#FEE500"
+          textColor="#191919"
+          onClick={handleKakaoLogin}
+        >
+          <RiKakaoTalkFill style={{ fontSize: '24px' }} />
+          카카오 로그인
+        </SocialButton>
 
-                {/* Google Standard: White background, #DADCE0 border, #3c4043 text */}
-                <SocialButton
-                    bgColor="#FFFFFF"
-                    textColor="#3c4043"
-                    border="1px solid #DADCE0"
-                    onClick={handleGoogleLogin}
-                >
-                    <FcGoogle style={{ fontSize: '20px' }} />
-                    Google 계정으로 로그인
-                </SocialButton>
-            </FormContainer>
+        {/* Google Standard: White background, #DADCE0 border, #3c4043 text */}
+        <SocialButton
+          bgColor="#FFFFFF"
+          textColor="#3c4043"
+          border="1px solid #DADCE0"
+          onClick={handleGoogleLogin}
+        >
+          <FcGoogle style={{ fontSize: '20px' }} />
+          Google 계정으로 로그인
+        </SocialButton>
+      </FormContainer>
 
-            <SignupLink>
-                계정이 없으신가요?
-                <Link to={PATH.SIGNUP}>회원가입</Link>
-            </SignupLink>
-        </Container>
-    );
+      <SignupLink>
+        계정이 없으신가요?
+        <Link to={PATH.SIGNUP}>회원가입</Link>
+      </SignupLink>
+    </Container>
+  );
 };
 
 export default LoginPage;

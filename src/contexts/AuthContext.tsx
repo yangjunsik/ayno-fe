@@ -5,6 +5,7 @@ import { getMyProfile } from '../api/user';
 interface AuthContextType {
     user: User | null;
     isLoggedIn: boolean;
+    isAdmin: boolean;
     isLoading: boolean;
     login: (user: User) => void;
     logout: () => void;
@@ -19,7 +20,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     const checkAuth = useCallback(async () => {
         try {
-            const response = await getMyProfile();
+            const response = await getMyProfile({ suppressErrorToast: true });
             if (response.data) {
                 setUser(response.data);
             } else {
@@ -46,7 +47,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }, []);
 
     return (
-        <AuthContext.Provider value={{ user, isLoggedIn: !!user, isLoading, login, logout, checkAuth }}>
+        <AuthContext.Provider value={{ user, isLoggedIn: !!user, isAdmin: user?.role === 'ADMIN', isLoading, login, logout, checkAuth }}>
             {children}
         </AuthContext.Provider>
     );

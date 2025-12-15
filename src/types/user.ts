@@ -8,4 +8,5 @@ export interface User {
     gender?: string;
     ageBand?: string;
     aiUsageDepth?: string;
+    role?: 'USER' | 'ADMIN';
 }
