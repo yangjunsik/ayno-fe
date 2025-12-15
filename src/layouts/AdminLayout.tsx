@@ -1,15 +1,31 @@
 import { Outlet } from 'react-router-dom';
+import styled from '@emotion/styled';
+import AdminSidebar from '../components/admin/AdminSidebar';
+import AdminHeader from '../components/admin/AdminHeader';
+
+const Container = styled.div`
+    display: flex;
+    min-height: 100vh;
+    background-color: #f0f2f5;
+`;
+
+const MainContent = styled.main`
+    flex: 1;
+    padding: 24px;
+    overflow-y: auto;
+`;
 
 const AdminLayout = () => {
     return (
-        <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
-            <header style={{ padding: '1rem', borderBottom: '1px solid #eee', background: '#f9f9f9' }}>
-                <h1>Admin Console</h1>
-            </header>
-            <main style={{ flex: 1, padding: '2rem' }}>
-                <Outlet />
-            </main>
-        </div>
+        <Container>
+            <AdminSidebar />
+            <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+                <AdminHeader />
+                <MainContent>
+                    <Outlet />
+                </MainContent>
+            </div>
+        </Container>
     );
 };
 
