@@ -1,4 +1,4 @@
-
+import React, { useEffect } from 'react';
 import styled from '@emotion/styled';
 import { useResource } from '../../../hooks/useResource';
 import ResourceInput from '../../../components/admin/resource/ResourceInput';
@@ -10,62 +10,65 @@ interface ResourceItem {
     name: string;
 }
 
-interface ResourceManagerProps<T> {
+interface ResourceManagerProps<T, I = string> {
     title: string;
     placeholder?: string;
-    getFn: () => Promise<T[] | ApiResponse<T[]>>;
-    addFn: (name: string) => Promise<T | ApiResponse<T>>;
+    getFn: () => Promise<T[]>;
+    addFn: (item: I) => Promise<T | ApiResponse<T>>;
     deleteFn: (id: number) => Promise<void | ApiResponse<void>>;
     mapItem: (item: T) => ResourceItem;
+    renderInput?: (onSubmit: (item: I) => Promise<void>, isLoading: boolean) => React.ReactNode;
 }
 
 const Container = styled.div`
-    padding: 20px;
-    max-width: 800px;
+    padding: 24px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 `;
 
 const Title = styled.h2`
-    margin-bottom: 24px;
     font-size: 24px;
+    margin-bottom: 24px;
     color: #333;
 `;
 
 const ErrorMessage = styled.div`
-    padding: 12px;
-    margin-bottom: 20px;
-    background-color: #fff2f0;
-    border: 1px solid #ffccc7;
-    border-radius: 8px;
     color: #ff4d4f;
+    margin-bottom: 16px;
+    padding: 8px 12px;
+    background-color: #fff1f0;
+    border: 1px solid #ffccc7;
+    border-radius: 4px;
 `;
 
-const ResourceManager = <T extends { [key: string]: any }>({
-    title,
-    placeholder,
-    getFn,
-    addFn,
-    deleteFn,
-    mapItem
-}: ResourceManagerProps<T>) => {
-    const { items, isLoading, error, addItem, deleteItem } = useResource(
-        getFn,
-        addFn,
-        deleteFn,
-        mapItem
-    );
+const ResourceManager = <T, I = string>({ title, placeholder, getFn, addFn, deleteFn, mapItem, renderInput }: ResourceManagerProps<T, I>) => {
+    const { items, isLoading, error, fetchItems, addItem, deleteItem } = useResource<T, I>(getFn, addFn, deleteFn);
+
+    useEffect(() => {
+        fetchItems();
+    }, [fetchItems]);
 
     return (
         <Container>
             <Title>{title}</Title>
+
             {error && <ErrorMessage>{error}</ErrorMessage>}
-            <ResourceInput
-                onAdd={addItem}
-                placeholder={placeholder}
-                isLoading={isLoading}
-            />
+
+            {renderInput ? (
+                renderInput(addItem, isLoading)
+            ) : (
+                <ResourceInput
+                    onAdd={addItem as unknown as (name: string) => Promise<void>}
+                    placeholder={placeholder}
+                    isLoading={isLoading}
+                />
+            )}
+
             <ResourceList
-                items={items}
+                items={items.map(mapItem)}
                 onDelete={deleteItem}
+                isLoading={isLoading}
             />
         </Container>
     );

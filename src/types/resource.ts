@@ -11,5 +11,7 @@ export interface JobRole {
 export interface Tool {
     toolId: number;
     toolName: string;
-    toolImageUrl?: string;
+    toolType: string;
+    toolIconUrl: string;
+    toolSiteUrl: string;
 }

@@ -10,6 +10,7 @@ interface ResourceItem {
 interface ResourceListProps {
     items: ResourceItem[];
     onDelete: (id: number) => Promise<void>;
+    isLoading?: boolean;
 }
 
 const List = styled.ul`
@@ -75,17 +76,17 @@ const EmptyState = styled.div`
     border-radius: 8px;
 `;
 
-const ResourceList: React.FC<ResourceListProps> = ({ items, onDelete }) => {
+const ResourceList: React.FC<ResourceListProps> = ({ items, onDelete, isLoading }) => {
     if (items.length === 0) {
         return <EmptyState>등록된 항목이 없습니다.</EmptyState>;
     }
 
     return (
-        <List>
+        <List style={{ opacity: isLoading ? 0.5 : 1, pointerEvents: isLoading ? 'none' : 'auto' }}>
             {items.map((item) => (
                 <ListItem key={item.id}>
                     <ItemName>{item.name}</ItemName>
-                    <DeleteButton onClick={() => onDelete(item.id)} title="삭제">
+                    <DeleteButton onClick={() => onDelete(item.id)} title="삭제" disabled={isLoading}>
                         <FaTrash size={14} />
                     </DeleteButton>
                 </ListItem>
