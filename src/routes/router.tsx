@@ -12,6 +12,9 @@ import { PATH } from './constants/path';
 import PrivateRoute from './PrivateRoute';
 import AdminDashboard from '../pages/admin/AdminDashboard';
 import AdminLoginPage from '../pages/admin/AdminLoginPage';
+import AdminInterestPage from '../pages/admin/resource/AdminInterestPage';
+import AdminJobRolePage from '../pages/admin/resource/AdminJobRolePage';
+import AdminToolPage from '../pages/admin/resource/AdminToolPage';
 import PrivateAdminRoute from './PrivateAdminRoute';
 import { AuthProvider } from '../contexts/AuthContext';
 import { AdminAuthProvider } from '../contexts/AdminAuthContext';
@@ -44,6 +47,18 @@ export const router = createBrowserRouter([
                             {
                                 index: true,
                                 element: <AdminDashboard />,
+                            },
+                            {
+                                path: 'interests',
+                                element: <AdminInterestPage />,
+                            },
+                            {
+                                path: 'jobs',
+                                element: <AdminJobRolePage />,
+                            },
+                            {
+                                path: 'tools',
+                                element: <AdminToolPage />,
                             },
                         ],
                     },
