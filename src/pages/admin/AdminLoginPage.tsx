@@ -1,5 +1,8 @@
 import styled from '@emotion/styled';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAdminAuthContext } from '../../contexts/AdminAuthContext';
+import { PATH } from '../../routes/constants/path';
 
 const Container = styled.div`
   display: flex;
@@ -72,16 +75,42 @@ const Button = styled.button`
   &:hover {
     background-color: #000;
   }
+  
+  &:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+`;
+
+const ErrorMessage = styled.div`
+  color: #dc2626;
+  font-size: 0.875rem;
+  text-align: center;
+  margin-top: 0.5rem;
 `;
 
 const AdminLoginPage = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const { login } = useAdminAuthContext();
+    const navigate = useNavigate();
+
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        console.log('Admin Login Attempt:', { username, password });
-        // TODO: Implement actual login logic
+        setError('');
+        setIsSubmitting(true);
+
+        try {
+            await login(username, password);
+            navigate(PATH.ADMIN);
+        } catch (err) {
+            setError('Invalid username or password');
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     return (
@@ -111,7 +140,10 @@ const AdminLoginPage = () => {
                             required
                         />
                     </InputGroup>
-                    <Button type="submit">Login</Button>
+                    {error && <ErrorMessage>{error}</ErrorMessage>}
+                    <Button type="submit" disabled={isSubmitting}>
+                        {isSubmitting ? 'Logging in...' : 'Login'}
+                    </Button>
                 </Form>
             </LoginCard>
         </Container>
