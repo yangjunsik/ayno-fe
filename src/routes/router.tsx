@@ -15,6 +15,8 @@ import AdminLoginPage from '../pages/admin/AdminLoginPage';
 import AdminInterestPage from '../pages/admin/resource/AdminInterestPage';
 import AdminJobRolePage from '../pages/admin/resource/AdminJobRolePage';
 import AdminToolPage from '../pages/admin/resource/AdminToolPage';
+import AdminReportPage from '../pages/admin/report/AdminReportPage';
+import AdminUserPage from '../pages/admin/user/AdminUserPage';
 import PrivateAdminRoute from './PrivateAdminRoute';
 import { AuthProvider } from '../contexts/AuthContext';
 import { AdminAuthProvider } from '../contexts/AdminAuthContext';
@@ -59,6 +61,14 @@ export const router = createBrowserRouter([
                             {
                                 path: 'tools',
                                 element: <AdminToolPage />,
+                            },
+                            {
+                                path: 'reports',
+                                element: <AdminReportPage />,
+                            },
+                            {
+                                path: 'users',
+                                element: <AdminUserPage />,
                             },
                         ],
                     },

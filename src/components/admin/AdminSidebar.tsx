@@ -1,7 +1,7 @@
 
 import { Link, useLocation } from 'react-router-dom';
 import styled from '@emotion/styled';
-import { FaChartPie, FaTags, FaUserTie, FaTools } from 'react-icons/fa';
+import { FaChartPie, FaTags, FaUserTie, FaTools, FaExclamationTriangle, FaUsers } from 'react-icons/fa';
 
 const SidebarContainer = styled.aside`
     width: 280px;
@@ -59,6 +59,15 @@ const MenuItem = styled(Link) <{ active?: boolean }>`
     }
 `;
 
+const SectionTitle = styled.div`
+    font-size: 12px;
+    font-weight: 700;
+    color: #666;
+    margin: 24px 0 12px 20px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+`;
+
 const AdminSidebar = () => {
     const location = useLocation();
 
@@ -75,6 +84,8 @@ const AdminSidebar = () => {
                 <MenuItem to="/admin" active={isActive('/admin')}>
                     <FaChartPie /> Dashboard
                 </MenuItem>
+
+                <SectionTitle>Resources</SectionTitle>
                 <MenuItem to="/admin/interests" active={isActive('/admin/interests')}>
                     <FaTags /> Interests
                 </MenuItem>
@@ -83,6 +94,14 @@ const AdminSidebar = () => {
                 </MenuItem>
                 <MenuItem to="/admin/tools" active={isActive('/admin/tools')}>
                     <FaTools /> Tools
+                </MenuItem>
+
+                <SectionTitle>Management</SectionTitle>
+                <MenuItem to="/admin/reports" active={isActive('/admin/reports')}>
+                    <FaExclamationTriangle /> Reports
+                </MenuItem>
+                <MenuItem to="/admin/users" active={isActive('/admin/users')}>
+                    <FaUsers /> Users
                 </MenuItem>
             </Menu>
         </SidebarContainer>
