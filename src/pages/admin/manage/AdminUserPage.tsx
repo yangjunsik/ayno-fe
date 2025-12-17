@@ -1,7 +1,6 @@
-import { useEffect, useState } from 'react';
 import styled from '@emotion/styled';
-import { getUsers, updateUserStatus } from '../../../api/adminUser';
-import type { AdminUserView, UserStatus } from '../../../types/adminUser';
+import { useAdminUsers } from '../../../hooks/admin/useAdminUsers';
+import type { UserStatus } from '../../../types/adminUser';
 import { formatDate } from '../../../utils/date';
 import Spinner from '../../../components/common/Spinner';
 
@@ -108,43 +107,7 @@ const StatusSelect = styled.select`
 `;
 
 const AdminUserPage = () => {
-    const [users, setUsers] = useState<AdminUserView[]>([]);
-    const [searchQuery, setSearchQuery] = useState('');
-    const [isLoading, setIsLoading] = useState(false);
-
-    const fetchUsers = async () => {
-        setIsLoading(true);
-        try {
-            const response = await getUsers({
-                q: searchQuery || undefined,
-                size: 20
-            });
-            if (response.data && Array.isArray(response.data.content)) {
-                setUsers(response.data.content);
-            }
-        } catch (error) {
-            console.error('Failed to fetch users', error);
-        } finally {
-            setIsLoading(false);
-        }
-    };
-
-    useEffect(() => {
-        const timer = setTimeout(() => {
-            fetchUsers();
-        }, 300); // Debounce search
-        return () => clearTimeout(timer);
-    }, [searchQuery]);
-
-    const handleStatusChange = async (userId: number, newStatus: UserStatus) => {
-        if (!window.confirm(`유저 상태를 ${newStatus}로 변경하시겠습니까?`)) return;
-        try {
-            await updateUserStatus(userId, newStatus);
-            fetchUsers();
-        } catch (error) {
-            alert('상태 변경 실패');
-        }
-    };
+    const { users, searchQuery, setSearchQuery, isLoading, handleStatusChange } = useAdminUsers();
 
     return (
         <Container>

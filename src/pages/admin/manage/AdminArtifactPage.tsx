@@ -1,7 +1,5 @@
-import { useEffect, useState } from 'react';
 import styled from '@emotion/styled';
-import { getArtifacts, deleteArtifact } from '../../../api/adminArtifact';
-import type { AdminArtifactView } from '../../../types/adminArtifact';
+import { useAdminArtifacts } from '../../../hooks/admin/useAdminArtifacts';
 import { formatDate } from '../../../utils/date';
 import Spinner from '../../../components/common/Spinner';
 
@@ -89,45 +87,7 @@ const DeleteButton = styled.button`
 `;
 
 const AdminArtifactPage = () => {
-    const [artifacts, setArtifacts] = useState<AdminArtifactView[]>([]);
-    const [searchQuery, setSearchQuery] = useState('');
-    const [isLoading, setIsLoading] = useState(false);
-
-    const fetchArtifacts = async () => {
-        setIsLoading(true);
-        try {
-            const response = await getArtifacts({
-                q: searchQuery || undefined,
-                size: 20
-            });
-            if (response.data && Array.isArray(response.data.content)) {
-                setArtifacts(response.data.content);
-            }
-        } catch (error) {
-            console.error('Failed to fetch artifacts', error);
-        } finally {
-            setIsLoading(false);
-        }
-    };
-
-    useEffect(() => {
-        const timer = setTimeout(() => {
-            fetchArtifacts();
-        }, 300);
-        return () => clearTimeout(timer);
-    }, [searchQuery]);
-
-    const handleDelete = async (artifactId: number) => {
-        if (window.confirm('정말로 이 아티팩트를 삭제하시겠습니까?')) {
-            try {
-                await deleteArtifact(artifactId);
-                fetchArtifacts();
-            } catch (error) {
-                console.error('Delete failed:', error);
-                alert('삭제 실패');
-            }
-        }
-    };
+    const { artifacts, searchQuery, setSearchQuery, isLoading, handleDelete } = useAdminArtifacts();
 
     return (
         <Container>
