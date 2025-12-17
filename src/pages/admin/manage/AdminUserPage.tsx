@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { useAdminUsers } from '../../../hooks/admin/useAdminUsers';
+import { useAdminUsers } from '../../../hooks/admin/manage/useAdminUsers';
 import type { UserStatus } from '../../../types/adminUser';
 import { formatDate } from '../../../utils/date';
 import Spinner from '../../../components/common/Spinner';

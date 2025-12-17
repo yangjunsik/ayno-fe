@@ -5,7 +5,7 @@ import { FiSearch } from 'react-icons/fi';
 import logo from '../../assets/logo_hero.svg';
 import writeIcon from '../../assets/write.png';
 import { PATH } from '../../routes/constants/path';
-import { useAuth } from '../../hooks/useAuth';
+import { useAuth } from '../../hooks/useLogin';
 
 const HeroContainer = styled.section`
   text-align: center;

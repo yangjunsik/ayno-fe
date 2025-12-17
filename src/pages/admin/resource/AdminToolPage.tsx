@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { useAdminTools } from '../../../hooks/admin/useAdminTools';
+import { useAdminTools } from '../../../hooks/admin/resource/useAdminTools';
 import Spinner from '../../../components/common/Spinner';
 
 const Container = styled.div`

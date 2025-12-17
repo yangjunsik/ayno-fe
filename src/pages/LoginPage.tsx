@@ -6,7 +6,7 @@ import { FcGoogle } from 'react-icons/fc';
 import { FiEye, FiEyeOff } from 'react-icons/fi';
 import logo from '../assets/logo_hero.svg';
 import { PATH } from '../routes/constants/path';
-import { useAuth } from '../hooks/useAuth';
+import { useAuth } from '../hooks/useLogin';
 
 const Container = styled.div`
   display: flex;
