@@ -17,6 +17,7 @@ import AdminJobRolePage from '../pages/admin/resource/AdminJobRolePage';
 import AdminToolPage from '../pages/admin/resource/AdminToolPage';
 import AdminReportPage from '../pages/admin/manage/AdminReportPage';
 import AdminUserPage from '../pages/admin/manage/AdminUserPage';
+import AdminArtifactPage from '../pages/admin/manage/AdminArtifactPage';
 import PrivateAdminRoute from './PrivateAdminRoute';
 import { AuthProvider } from '../contexts/AuthContext';
 import { AdminAuthProvider } from '../contexts/AdminAuthContext';
@@ -69,6 +70,10 @@ export const router = createBrowserRouter([
                             {
                                 path: 'users',
                                 element: <AdminUserPage />,
+                            },
+                            {
+                                path: 'artifacts',
+                                element: <AdminArtifactPage />,
                             },
                         ],
                     },

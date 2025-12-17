@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import styled from '@emotion/styled';
-import { getUsers, updateUserStatus } from '../../../api/adminUser';
-import type { AdminUserView, UserStatus } from '../../../types/adminUser';
+import { getArtifacts, deleteArtifact } from '../../../api/adminArtifact';
+import type { AdminArtifactView } from '../../../types/adminArtifact';
 import { formatDate } from '../../../utils/date';
 import Spinner from '../../../components/common/Spinner';
 
@@ -69,61 +69,42 @@ const StatusBadge = styled.span<{ status: string }>`
     border-radius: 4px;
     font-size: 12px;
     font-weight: 600;
-    background-color: ${props => {
-        switch (props.status) {
-            case 'ACTIVE': return '#e6f7ff';
-            case 'BLOCKED': return '#fff1f0';
-            case 'WITHDRAWN': return '#f5f5f5';
-            default: return '#f5f5f5';
-        }
-    }};
-    color: ${props => {
-        switch (props.status) {
-            case 'ACTIVE': return '#1890ff';
-            case 'BLOCKED': return '#f5222d';
-            case 'WITHDRAWN': return '#d9d9d9';
-            default: return '#d9d9d9';
-        }
-    }};
+    background-color: ${props => props.status === 'PUBLIC' ? '#e6f7ff' : '#f5f5f5'};
+    color: ${props => props.status === 'PUBLIC' ? '#1890ff' : '#d9d9d9'};
 `;
 
-const StatusSelect = styled.select`
-    padding: 6px 10px;
-    border-radius: 6px;
-    border: 1px solid #d9d9d9;
-    font-size: 13px;
+const DeleteButton = styled.button`
+    padding: 6px 12px;
+    background-color: #ff4d4f;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 12px;
     cursor: pointer;
-    background-color: #fff;
-    color: #333;
-    outline: none;
+    transition: background-color 0.2s;
 
     &:hover {
-        border-color: #40a9ff;
-    }
-    
-    &:focus {
-        border-color: #40a9ff;
-        box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+        background-color: #d9363e;
     }
 `;
 
-const AdminUserPage = () => {
-    const [users, setUsers] = useState<AdminUserView[]>([]);
+const AdminArtifactPage = () => {
+    const [artifacts, setArtifacts] = useState<AdminArtifactView[]>([]);
     const [searchQuery, setSearchQuery] = useState('');
     const [isLoading, setIsLoading] = useState(false);
 
-    const fetchUsers = async () => {
+    const fetchArtifacts = async () => {
         setIsLoading(true);
         try {
-            const response = await getUsers({
+            const response = await getArtifacts({
                 q: searchQuery || undefined,
                 size: 20
             });
             if (response.data && Array.isArray(response.data.content)) {
-                setUsers(response.data.content);
+                setArtifacts(response.data.content);
             }
         } catch (error) {
-            console.error('Failed to fetch users', error);
+            console.error('Failed to fetch artifacts', error);
         } finally {
             setIsLoading(false);
         }
@@ -131,27 +112,29 @@ const AdminUserPage = () => {
 
     useEffect(() => {
         const timer = setTimeout(() => {
-            fetchUsers();
-        }, 300); // Debounce search
+            fetchArtifacts();
+        }, 300);
         return () => clearTimeout(timer);
     }, [searchQuery]);
 
-    const handleStatusChange = async (userId: number, newStatus: UserStatus) => {
-        if (!window.confirm(`유저 상태를 ${newStatus}로 변경하시겠습니까?`)) return;
-        try {
-            await updateUserStatus(userId, newStatus);
-            fetchUsers();
-        } catch (error) {
-            alert('상태 변경 실패');
+    const handleDelete = async (artifactId: number) => {
+        if (window.confirm('정말로 이 아티팩트를 삭제하시겠습니까?')) {
+            try {
+                await deleteArtifact(artifactId);
+                fetchArtifacts();
+            } catch (error) {
+                console.error('Delete failed:', error);
+                alert('삭제 실패');
+            }
         }
     };
 
     return (
         <Container>
-            <Title>유저 관리</Title>
+            <Title>아티팩트 관리</Title>
             <FilterSection>
                 <SearchInput
-                    placeholder="유저 ID(숫자) 또는 닉네임 검색"
+                    placeholder="제목, 작성자 또는 ID 검색"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                 />
@@ -161,11 +144,11 @@ const AdminUserPage = () => {
                 <thead>
                     <tr>
                         <Th width="80px" align="center">ID</Th>
-                        <Th width="180px" align="center">닉네임</Th>
-                        <Th align="center">이메일</Th>
-                        <Th width="120px" align="center">가입일</Th>
+                        <Th align="center">제목</Th>
+                        <Th width="150px" align="center">작성자</Th>
+                        <Th width="120px" align="center">작성일</Th>
                         <Th width="100px" align="center">상태</Th>
-                        <Th width="120px" align="center">관리</Th>
+                        <Th width="80px" align="center">관리</Th>
                     </tr>
                 </thead>
                 <tbody>
@@ -175,35 +158,30 @@ const AdminUserPage = () => {
                                 <Spinner />
                             </Td>
                         </tr>
-                    ) : users.length === 0 ? (
+                    ) : artifacts.length === 0 ? (
                         <tr><Td colSpan={6} align="center">데이터가 없습니다.</Td></tr>
                     ) : (
-                        users.map((user) => (
-                            <tr key={user.userId}>
-                                <Td align="center">{user.userId}</Td>
-                                <Td align="center">{user.nickname}</Td>
-                                <Td align="center">{user.email}</Td>
-                                <Td align="center">{formatDate(user.createdAt)}</Td>
+                        artifacts.map((artifact) => (
+                            <tr key={artifact.artifactId}>
+                                <Td align="center">{artifact.artifactId}</Td>
+                                <Td align="center">{artifact.artifactTitle}</Td>
+                                <Td align="center">{artifact.nickname}</Td>
+                                <Td align="center">{formatDate(artifact.createdAt)}</Td>
                                 <Td align="center">
-                                    <StatusBadge status={user.status}>{user.status}</StatusBadge>
+                                    <StatusBadge status={artifact.visibility}>{artifact.visibility}</StatusBadge>
                                 </Td>
                                 <Td align="center">
-                                    <StatusSelect
-                                        value={user.status}
-                                        onChange={(e) => handleStatusChange(user.userId, e.target.value as UserStatus)}
-                                    >
-                                        <option value="ACTIVE">ACTIVE</option>
-                                        <option value="BLOCKED">BLOCKED</option>
-                                        <option value="WITHDRAWN">WITHDRAWN</option>
-                                    </StatusSelect>
+                                    <DeleteButton onClick={() => handleDelete(artifact.artifactId)}>
+                                        삭제
+                                    </DeleteButton>
                                 </Td>
                             </tr>
                         ))
                     )}
                 </tbody>
             </Table>
-        </Container >
+        </Container>
     );
 };
 
-export default AdminUserPage;
+export default AdminArtifactPage;

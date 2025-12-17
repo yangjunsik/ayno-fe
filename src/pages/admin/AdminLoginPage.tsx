@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAdminAuthContext } from '../../contexts/AdminAuthContext';
 import { PATH } from '../../routes/constants/path';
@@ -90,64 +90,74 @@ const ErrorMessage = styled.div`
 `;
 
 const AdminLoginPage = () => {
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
-    const [error, setError] = useState('');
-    const [isSubmitting, setIsSubmitting] = useState(false);
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-    const { login } = useAdminAuthContext();
-    const navigate = useNavigate();
+  const { login, isAdminLoggedIn, isLoading } = useAdminAuthContext();
+  const navigate = useNavigate();
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-        setError('');
-        setIsSubmitting(true);
+  useEffect(() => {
+    if (!isLoading && isAdminLoggedIn) {
+      navigate(PATH.ADMIN, { replace: true });
+    }
+  }, [isAdminLoggedIn, isLoading, navigate]);
 
-        try {
-            await login(username, password);
-            navigate(PATH.ADMIN);
-        } catch (err) {
-            setError('Invalid username or password');
-        } finally {
-            setIsSubmitting(false);
-        }
-    };
+  if (isLoading) {
+    return null; // or a loading spinner
+  }
 
-    return (
-        <Container>
-            <LoginCard>
-                <Title>Admin Login</Title>
-                <Form onSubmit={handleSubmit}>
-                    <InputGroup>
-                        <Label htmlFor="username">Username</Label>
-                        <Input
-                            id="username"
-                            type="text"
-                            value={username}
-                            onChange={(e) => setUsername(e.target.value)}
-                            placeholder="Enter admin username"
-                            required
-                        />
-                    </InputGroup>
-                    <InputGroup>
-                        <Label htmlFor="password">Password</Label>
-                        <Input
-                            id="password"
-                            type="password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            placeholder="Enter password"
-                            required
-                        />
-                    </InputGroup>
-                    {error && <ErrorMessage>{error}</ErrorMessage>}
-                    <Button type="submit" disabled={isSubmitting}>
-                        {isSubmitting ? 'Logging in...' : 'Login'}
-                    </Button>
-                </Form>
-            </LoginCard>
-        </Container>
-    );
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError('');
+    setIsSubmitting(true);
+
+    try {
+      await login(username, password);
+      navigate(PATH.ADMIN);
+    } catch (err) {
+      setError('Invalid username or password');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  return (
+    <Container>
+      <LoginCard>
+        <Title>Admin Login</Title>
+        <Form onSubmit={handleSubmit}>
+          <InputGroup>
+            <Label htmlFor="username">Username</Label>
+            <Input
+              id="username"
+              type="text"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              placeholder="Enter admin username"
+              required
+            />
+          </InputGroup>
+          <InputGroup>
+            <Label htmlFor="password">Password</Label>
+            <Input
+              id="password"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Enter password"
+              required
+            />
+          </InputGroup>
+          {error && <ErrorMessage>{error}</ErrorMessage>}
+          <Button type="submit" disabled={isSubmitting}>
+            {isSubmitting ? 'Logging in...' : 'Login'}
+          </Button>
+        </Form>
+      </LoginCard>
+    </Container>
+  );
 };
 
 export default AdminLoginPage;
