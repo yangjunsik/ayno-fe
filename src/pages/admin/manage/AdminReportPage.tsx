@@ -4,6 +4,7 @@ import { getReports, updateReportStatus } from '../../../api/adminReport';
 import { updateUserStatus } from '../../../api/adminUser';
 import type { Report, ReportStatus, TargetType } from '../../../types/adminReport';
 import { formatDate } from '../../../utils/date';
+import Spinner from '../../../components/common/Spinner';
 
 const Container = styled.div`
     padding: 32px;
@@ -191,7 +192,11 @@ const AdminReportPage = () => {
                 </thead>
                 <tbody>
                     {isLoading ? (
-                        <tr><Td colSpan={9} style={{ textAlign: 'center' }}>로딩중...</Td></tr>
+                        <tr>
+                            <Td colSpan={9}>
+                                <Spinner />
+                            </Td>
+                        </tr>
                     ) : reports.length === 0 ? (
                         <tr><Td colSpan={9} style={{ textAlign: 'center' }}>데이터가 없습니다.</Td></tr>
                     ) : (

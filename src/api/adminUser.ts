@@ -6,7 +6,7 @@ interface GetUsersParams {
     page?: number;
     size?: number;
     status?: UserStatus;
-    q?: string; // Search query (nickname or email)
+    userId?: number;
     sort?: string[];
 }
 

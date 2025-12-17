@@ -3,6 +3,7 @@ import styled from '@emotion/styled';
 import { getUsers, updateUserStatus } from '../../../api/adminUser';
 import type { AdminUserView, UserStatus } from '../../../types/adminUser';
 import { formatDate } from '../../../utils/date';
+import Spinner from '../../../components/common/Spinner';
 
 const Container = styled.div`
     padding: 32px;
@@ -69,14 +70,14 @@ const StatusSelect = styled.select`
 
 const AdminUserPage = () => {
     const [users, setUsers] = useState<AdminUserView[]>([]);
-    const [searchQuery, setSearchQuery] = useState('');
+    const [searchId, setSearchId] = useState('');
     const [isLoading, setIsLoading] = useState(false);
 
     const fetchUsers = async () => {
         setIsLoading(true);
         try {
             const response = await getUsers({
-                q: searchQuery || undefined,
+                userId: searchId ? Number(searchId) : undefined,
                 size: 20
             });
             if (response.data && Array.isArray(response.data.content)) {
@@ -94,7 +95,7 @@ const AdminUserPage = () => {
             fetchUsers();
         }, 300); // Debounce search
         return () => clearTimeout(timer);
-    }, [searchQuery]);
+    }, [searchId]);
 
     const handleStatusChange = async (userId: number, newStatus: UserStatus) => {
         if (!window.confirm(`유저 상태를 ${newStatus}로 변경하시겠습니까?`)) return;
@@ -111,9 +112,14 @@ const AdminUserPage = () => {
             <Title>유저 관리</Title>
             <FilterSection>
                 <SearchInput
-                    placeholder="닉네임 또는 이메일 검색"
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
+                    placeholder="User ID 검색 (숫자)"
+                    value={searchId}
+                    onChange={(e) => {
+                        const val = e.target.value;
+                        if (val === '' || /^\d+$/.test(val)) {
+                            setSearchId(val);
+                        }
+                    }}
                 />
             </FilterSection>
 
@@ -130,7 +136,11 @@ const AdminUserPage = () => {
                 </thead>
                 <tbody>
                     {isLoading ? (
-                        <tr><Td colSpan={6} style={{ textAlign: 'center' }}>로딩중...</Td></tr>
+                        <tr>
+                            <Td colSpan={6}>
+                                <Spinner />
+                            </Td>
+                        </tr>
                     ) : users.length === 0 ? (
                         <tr><Td colSpan={6} style={{ textAlign: 'center' }}>데이터가 없습니다.</Td></tr>
                     ) : (
