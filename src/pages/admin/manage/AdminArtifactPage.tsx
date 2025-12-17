@@ -28,15 +28,17 @@ const FilterSection = styled.div`
 `;
 
 const SearchInput = styled.input`
-    padding: 10px 14px;
+    padding: 12px 16px;
     border-radius: 8px;
     border: 1px solid #e0e0e0;
     font-size: 14px;
-    width: 240px;
+    width: 320px;
+    transition: all 0.2s;
 
     &:focus {
         outline: none;
-        border-color: #000;
+        border-color: #333;
+        box-shadow: 0 0 0 2px rgba(0,0,0,0.05);
     }
 `;
 
@@ -46,18 +48,30 @@ const Table = styled.table`
     font-size: 14px;
 `;
 
-const Th = styled.th`
-    text-align: left;
+const Th = styled.th<{ width?: string; align?: string }>`
+    text-align: ${props => props.align || 'left'};
     padding: 16px;
     border-bottom: 2px solid #f0f0f0;
     color: #666;
     font-weight: 600;
+    width: ${props => props.width || 'auto'};
 `;
 
-const Td = styled.td`
+const Td = styled.td<{ align?: string }>`
     padding: 16px;
     border-bottom: 1px solid #f0f0f0;
     color: #333;
+    text-align: ${props => props.align || 'left'};
+`;
+
+const StatusBadge = styled.span<{ status: string }>`
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+    background-color: ${props => props.status === 'PUBLIC' ? '#f6ffed' : '#fff1f0'};
+    color: ${props => props.status === 'PUBLIC' ? '#52c41a' : '#f5222d'};
+    border: 1px solid ${props => props.status === 'PUBLIC' ? '#b7eb8f' : '#ffa39e'};
 `;
 
 const DeleteButton = styled.button`
@@ -110,6 +124,7 @@ const AdminArtifactPage = () => {
                 await deleteArtifact(artifactId);
                 fetchArtifacts();
             } catch (error) {
+                console.error('Delete failed:', error);
                 alert('삭제 실패');
             }
         }
@@ -129,32 +144,34 @@ const AdminArtifactPage = () => {
             <Table>
                 <thead>
                     <tr>
-                        <Th>ID</Th>
+                        <Th width="80px" align="center">ID</Th>
                         <Th>제목</Th>
-                        <Th>작성자</Th>
-                        <Th>작성일</Th>
-                        <Th>상태</Th>
-                        <Th>관리</Th>
+                        <Th width="150px">작성자</Th>
+                        <Th width="120px" align="center">작성일</Th>
+                        <Th width="100px" align="center">상태</Th>
+                        <Th width="80px" align="center">관리</Th>
                     </tr>
                 </thead>
                 <tbody>
                     {isLoading ? (
                         <tr>
-                            <Td colSpan={6}>
+                            <Td colSpan={6} align="center">
                                 <Spinner />
                             </Td>
                         </tr>
                     ) : artifacts.length === 0 ? (
-                        <tr><Td colSpan={6} style={{ textAlign: 'center' }}>데이터가 없습니다.</Td></tr>
+                        <tr><Td colSpan={6} align="center">데이터가 없습니다.</Td></tr>
                     ) : (
                         artifacts.map((artifact) => (
                             <tr key={artifact.artifactId}>
-                                <Td>{artifact.artifactId}</Td>
+                                <Td align="center">{artifact.artifactId}</Td>
                                 <Td>{artifact.artifactTitle}</Td>
                                 <Td>{artifact.nickname}</Td>
-                                <Td>{formatDate(artifact.createdAt)}</Td>
-                                <Td>{artifact.visibility}</Td>
-                                <Td>
+                                <Td align="center">{formatDate(artifact.createdAt)}</Td>
+                                <Td align="center">
+                                    <StatusBadge status={artifact.visibility}>{artifact.visibility}</StatusBadge>
+                                </Td>
+                                <Td align="center">
                                     <DeleteButton onClick={() => handleDelete(artifact.artifactId)}>
                                         삭제
                                     </DeleteButton>

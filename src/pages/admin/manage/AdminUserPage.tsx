@@ -28,15 +28,17 @@ const FilterSection = styled.div`
 `;
 
 const SearchInput = styled.input`
-    padding: 10px 14px;
+    padding: 12px 16px;
     border-radius: 8px;
     border: 1px solid #e0e0e0;
     font-size: 14px;
-    width: 240px;
+    width: 320px;
+    transition: all 0.2s;
 
     &:focus {
         outline: none;
-        border-color: #000;
+        border-color: #333;
+        box-shadow: 0 0 0 2px rgba(0,0,0,0.05);
     }
 `;
 
@@ -46,26 +48,63 @@ const Table = styled.table`
     font-size: 14px;
 `;
 
-const Th = styled.th`
-    text-align: left;
+const Th = styled.th<{ width?: string; align?: string }>`
+    text-align: ${props => props.align || 'left'};
     padding: 16px;
     border-bottom: 2px solid #f0f0f0;
     color: #666;
     font-weight: 600;
+    width: ${props => props.width || 'auto'};
 `;
 
-const Td = styled.td`
+const Td = styled.td<{ align?: string }>`
     padding: 16px;
     border-bottom: 1px solid #f0f0f0;
     color: #333;
+    text-align: ${props => props.align || 'left'};
+`;
+
+const StatusBadge = styled.span<{ status: string }>`
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+    background-color: ${props => {
+        switch (props.status) {
+            case 'ACTIVE': return '#e6f7ff';
+            case 'BLOCKED': return '#fff1f0';
+            case 'WITHDRAWN': return '#f5f5f5';
+            default: return '#f5f5f5';
+        }
+    }};
+    color: ${props => {
+        switch (props.status) {
+            case 'ACTIVE': return '#1890ff';
+            case 'BLOCKED': return '#f5222d';
+            case 'WITHDRAWN': return '#d9d9d9';
+            default: return '#d9d9d9';
+        }
+    }};
 `;
 
 const StatusSelect = styled.select`
-    padding: 6px;
-    border-radius: 4px;
+    padding: 6px 10px;
+    border-radius: 6px;
     border: 1px solid #d9d9d9;
-    font-size: 12px;
+    font-size: 13px;
     cursor: pointer;
+    background-color: #fff;
+    color: #333;
+    outline: none;
+
+    &:hover {
+        border-color: #40a9ff;
+    }
+    
+    &:focus {
+        border-color: #40a9ff;
+        box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+    }
 `;
 
 const AdminUserPage = () => {
@@ -121,32 +160,34 @@ const AdminUserPage = () => {
             <Table>
                 <thead>
                     <tr>
-                        <Th>ID</Th>
-                        <Th>닉네임</Th>
+                        <Th width="80px" align="center">ID</Th>
+                        <Th width="180px">닉네임</Th>
                         <Th>이메일</Th>
-                        <Th>가입일</Th>
-                        <Th>상태</Th>
-                        <Th>관리</Th>
+                        <Th width="120px" align="center">가입일</Th>
+                        <Th width="100px" align="center">상태</Th>
+                        <Th width="120px" align="center">관리</Th>
                     </tr>
                 </thead>
                 <tbody>
                     {isLoading ? (
                         <tr>
-                            <Td colSpan={6}>
+                            <Td colSpan={6} align="center">
                                 <Spinner />
                             </Td>
                         </tr>
                     ) : users.length === 0 ? (
-                        <tr><Td colSpan={6} style={{ textAlign: 'center' }}>데이터가 없습니다.</Td></tr>
+                        <tr><Td colSpan={6} align="center">데이터가 없습니다.</Td></tr>
                     ) : (
                         users.map((user) => (
                             <tr key={user.userId}>
-                                <Td>{user.userId}</Td>
+                                <Td align="center">{user.userId}</Td>
                                 <Td>{user.nickname}</Td>
                                 <Td>{user.email}</Td>
-                                <Td>{formatDate(user.createdAt)}</Td>
-                                <Td>{user.status}</Td>
-                                <Td>
+                                <Td align="center">{formatDate(user.createdAt)}</Td>
+                                <Td align="center">
+                                    <StatusBadge status={user.status}>{user.status}</StatusBadge>
+                                </Td>
+                                <Td align="center">
                                     <StatusSelect
                                         value={user.status}
                                         onChange={(e) => handleStatusChange(user.userId, e.target.value as UserStatus)}
