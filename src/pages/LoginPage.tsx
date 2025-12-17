@@ -1,14 +1,12 @@
 import styled from '@emotion/styled';
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { RiKakaoTalkFill } from 'react-icons/ri';
 import { FcGoogle } from 'react-icons/fc';
 import { FiEye, FiEyeOff } from 'react-icons/fi';
 import logo from '../assets/logo_hero.svg';
 import { PATH } from '../routes/constants/path';
-import { login } from '../api/auth';
-import { getMyProfile } from '../api/user';
-import { useAuth } from '../hooks/useAuth';
+import { useAuth } from '../hooks/useLogin';
 
 const Container = styled.div`
   display: flex;
@@ -98,6 +96,11 @@ const LoginButton = styled.button`
   &:hover {
     opacity: 0.9;
   }
+
+  &:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
 `;
 
 const ErrorMessage = styled.p`
@@ -181,47 +184,25 @@ const SignupLink = styled.div`
 `;
 
 const LoginPage = () => {
-  const navigate = useNavigate();
-  const { login: authLogin } = useAuth();
+  const { login, kakaoLogin, googleLogin, isLoggingIn, error } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const [errorMessage, setErrorMessage] = useState('');
+  const [localError, setLocalError] = useState('');
 
   const handleLogin = async () => {
-    setErrorMessage(''); // Reset error
-
+    setLocalError('');
     if (!email || !password) {
-      setErrorMessage('이메일과 비밀번호를 모두 입력해주세요.');
+      setLocalError('이메일과 비밀번호를 모두 입력해주세요.');
       return;
     }
 
     try {
       await login({ username: email, password });
-
-      // Login success: Fetch user profile
-      const response = await getMyProfile();
-      if (response.data) {
-        authLogin(response.data);
-        navigate(PATH.HOME);
-      } else {
-        // Fallback if no data
-        navigate(PATH.HOME);
-      }
-    } catch (error: any) {
-      console.error('Login failed:', error);
-      const message = error.response?.data?.errorMessage || '아이디 또는 비밀번호가 일치하지 않습니다.';
-      setErrorMessage(message);
+    } catch (e) {
+      // Error is handled in hook and put into 'error' state, 
+      // but we can also catch it here if we needed to do something else.
     }
-  };
-
-  const handleKakaoLogin = () => {
-    const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080';
-    window.location.href = `${API_URL}/oauth2/authorization/kakao`;
-  };
-
-  const handleGoogleLogin = () => {
-    alert('구글 로그인 준비 중입니다.');
   };
 
   return (
@@ -235,10 +216,8 @@ const LoginPage = () => {
               type="email"
               placeholder="이메일을 입력해주세요"
               value={email}
-              onChange={(e) => {
-                setEmail(e.target.value);
-              }}
-              hasError={!!errorMessage}
+              onChange={(e) => setEmail(e.target.value)}
+              hasError={!!localError || !!error}
             />
           </InputWrapper>
         </InputGroup>
@@ -249,13 +228,11 @@ const LoginPage = () => {
               type={showPassword ? 'text' : 'password'}
               placeholder="비밀번호를 입력해주세요"
               value={password}
-              onChange={(e) => {
-                setPassword(e.target.value);
-              }}
+              onChange={(e) => setPassword(e.target.value)}
               onKeyDown={(e) => {
                 if (e.key === 'Enter') handleLogin();
               }}
-              hasError={!!errorMessage}
+              hasError={!!localError || !!error}
             />
             <TogglePasswordButton onClick={() => setShowPassword(!showPassword)} type="button">
               {showPassword ? <FiEyeOff /> : <FiEye />}
@@ -263,32 +240,30 @@ const LoginPage = () => {
           </InputWrapper>
         </InputGroup>
 
-        {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
+        {(localError || error) && <ErrorMessage>{localError || error}</ErrorMessage>}
 
-        <LoginButton onClick={handleLogin}>
-          로그인
+        <LoginButton onClick={handleLogin} disabled={isLoggingIn}>
+          {isLoggingIn ? '로그인 중...' : '로그인'}
         </LoginButton>
       </FormContainer>
 
       <Divider>또는</Divider>
 
       <FormContainer>
-        {/* Kakao Standard: #FEE500 background, #191919 text */}
         <SocialButton
           bgColor="#FEE500"
           textColor="#191919"
-          onClick={handleKakaoLogin}
+          onClick={kakaoLogin}
         >
           <RiKakaoTalkFill style={{ fontSize: '24px' }} />
           카카오 로그인
         </SocialButton>
 
-        {/* Google Standard: White background, #DADCE0 border, #3c4043 text */}
         <SocialButton
           bgColor="#FFFFFF"
           textColor="#3c4043"
           border="1px solid #DADCE0"
-          onClick={handleGoogleLogin}
+          onClick={googleLogin}
         >
           <FcGoogle style={{ fontSize: '20px' }} />
           Google 계정으로 로그인

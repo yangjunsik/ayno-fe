@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
-import { getInterests, addInterest, deleteInterest } from '../../api/adminResource';
-import type { Interest } from '../../types/resource';
+import { getInterests, addInterest, deleteInterest } from '../../../api/adminResource';
+import type { Interest } from '../../../types/resource';
 
 export const useAdminInterests = () => {
     const [interests, setInterests] = useState<Interest[]>([]);

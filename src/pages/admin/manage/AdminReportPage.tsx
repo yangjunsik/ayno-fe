@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { useAdminReports } from '../../../hooks/admin/useAdminReports';
+import { useAdminReports } from '../../../hooks/admin/manage/useAdminReports';
 import type { ReportStatus, TargetType } from '../../../types/adminReport';
 import { formatDate } from '../../../utils/date';
 import Spinner from '../../../components/common/Spinner';

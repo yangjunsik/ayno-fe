@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
-import { getJobRoles, addJobRole, deleteJobRole } from '../../api/adminResource';
-import type { JobRole } from '../../types/resource';
+import { getJobRoles, addJobRole, deleteJobRole } from '../../../api/adminResource';
+import type { JobRole } from '../../../types/resource';
 
 export const useAdminJobRoles = () => {
     const [jobRoles, setJobRoles] = useState<JobRole[]>([]);

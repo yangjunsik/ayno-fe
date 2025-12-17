@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 import { Link } from 'react-router-dom';
 import { PATH } from '../../routes/constants/path';
 import logo from '../../assets/logo_header.svg';
-import { useAuth } from '../../hooks/useAuth';
+import { useAuth } from '../../hooks/useLogin';
 import { FaUserCircle } from 'react-icons/fa';
 
 const HeaderContainer = styled.header`

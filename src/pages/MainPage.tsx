@@ -91,57 +91,27 @@ const ContentWrapper = styled.div`
   flex-direction: column;
 `;
 
-import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { PATH } from '../routes/constants/path';
-import { getArtifacts, searchArtifacts } from '../api/artifact';
-import type { Artifact } from '../types/artifact';
+import { useMainPage } from '../hooks/useMainPage';
 import Spinner from '../components/common/Spinner';
 
 // ... (styled components)
 
 const MainPage = () => {
   const navigate = useNavigate();
-  const [flows, setFlows] = useState<Artifact[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [searchKeyword, setSearchKeyword] = useState('');
-  const [currentPage, setCurrentPage] = useState(0);
-  const [totalPages, setTotalPages] = useState(0);
-  const [sort, setSort] = useState('createdAt,desc');
-
-  useEffect(() => {
-    const fetchArtifacts = async () => {
-      setLoading(true);
-      try {
-        let response;
-        if (searchKeyword) {
-          response = await searchArtifacts(searchKeyword, currentPage, 12, sort);
-        } else {
-          response = await getArtifacts(currentPage, 12, sort);
-        }
-        setFlows(response.data.content);
-        setTotalPages(response.data.totalPages);
-      } catch (err) {
-        setError('Failed to load artifacts');
-        console.error(err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchArtifacts();
-  }, [searchKeyword, currentPage, sort]);
-
-  const handleSearch = (keyword: string) => {
-    setSearchKeyword(keyword);
-    setCurrentPage(0); // Reset to first page on new search
-  };
-
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page);
-    window.scrollTo(0, 0); // Scroll to top on page change
-  };
+  const {
+    flows,
+    loading,
+    error,
+    currentPage,
+    totalPages,
+    sort,
+    setSort,
+    searchKeyword,
+    handleSearch,
+    handlePageChange
+  } = useMainPage();
 
   return (
     <>

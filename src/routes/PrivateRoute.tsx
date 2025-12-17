@@ -1,5 +1,5 @@
 import { Navigate } from 'react-router-dom';
-import { useAuth } from '../hooks/useAuth';
+import { useAuth } from '../hooks/useLogin';
 import { PATH } from './constants/path';
 import Spinner from '../components/common/Spinner';
 
@@ -8,9 +8,9 @@ interface PrivateRouteProps {
 }
 
 const PrivateRoute = ({ children }: PrivateRouteProps) => {
-    const { isLoggedIn, isLoading } = useAuth();
+    const { isLoggedIn, isInitializing } = useAuth();
 
-    if (isLoading) {
+    if (isInitializing) {
         return <Spinner />;
     }
 

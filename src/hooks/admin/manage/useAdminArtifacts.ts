@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
-import { getArtifacts, deleteArtifact } from '../../api/adminArtifact';
-import type { AdminArtifactView } from '../../types/adminArtifact';
+import { getArtifacts, deleteArtifact } from '../../../api/adminArtifact';
+import type { AdminArtifactView } from '../../../types/adminArtifact';
 
 export const useAdminArtifacts = () => {
     const [artifacts, setArtifacts] = useState<AdminArtifactView[]>([]);

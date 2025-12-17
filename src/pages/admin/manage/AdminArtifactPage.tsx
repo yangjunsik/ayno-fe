@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { useAdminArtifacts } from '../../../hooks/admin/useAdminArtifacts';
+import { useAdminArtifacts } from '../../../hooks/admin/manage/useAdminArtifacts';
 import { formatDate } from '../../../utils/date';
 import Spinner from '../../../components/common/Spinner';
 
