@@ -5,7 +5,7 @@ import { useAdminAuthContext } from '../../contexts/AdminAuthContext';
 
 const HeaderContainer = styled.header`
     background: #ffffff;
-    padding: 0 24px;
+    padding: 0 22px;
     height: 80px;
     display: flex;
     align-items: center;
@@ -22,7 +22,7 @@ const ProfileSection = styled.div`
 `;
 
 const WelcomeText = styled.span`
-    font-size: 14px;
+    font-size: 15px;
     color: #333;
     font-weight: 500;
     
@@ -40,13 +40,12 @@ const LogoutButton = styled.button`
     padding: 8px 12px;
     border-radius: 4px;
     cursor: pointer;
-    font-size: 13px;
+    font-size: 15px;
     color: #888;
     transition: all 0.2s;
     font-weight: 500;
 
     &:hover {
-        background-color: #f5f5f5;
         color: #d32f2f;
     }
 `;
