@@ -1,16 +1,9 @@
 import { useEffect, useState } from 'react';
 import styled from '@emotion/styled';
+import { getArtifacts, deleteArtifact } from '../../../api/adminArtifact';
+import type { AdminArtifactView } from '../../../types/adminArtifact';
 import { formatDate } from '../../../utils/date';
 import Spinner from '../../../components/common/Spinner';
-
-// Mock Data Types
-interface Artifact {
-    artifactId: number;
-    title: string;
-    authorNickname: string;
-    createdAt: string;
-    status: 'PUBLIC' | 'PRIVATE';
-}
 
 const Container = styled.div`
     padding: 32px;
@@ -83,32 +76,42 @@ const DeleteButton = styled.button`
 `;
 
 const AdminArtifactPage = () => {
-    const [artifacts, setArtifacts] = useState<Artifact[]>([]);
+    const [artifacts, setArtifacts] = useState<AdminArtifactView[]>([]);
     const [searchQuery, setSearchQuery] = useState('');
     const [isLoading, setIsLoading] = useState(false);
 
-    // Mock Fetch
     const fetchArtifacts = async () => {
         setIsLoading(true);
-        // Simulate API call
-        setTimeout(() => {
-            setArtifacts([
-                { artifactId: 1, title: '멋진 프로젝트', authorNickname: 'dev_king', createdAt: '2025-12-10 10:00:00', status: 'PUBLIC' },
-                { artifactId: 2, title: '비공개 아티팩트', authorNickname: 'secret_user', createdAt: '2025-12-11 15:30:00', status: 'PRIVATE' },
-                { artifactId: 3, title: '테스트 게시물', authorNickname: 'tester', createdAt: '2025-12-12 09:20:00', status: 'PUBLIC' },
-            ]);
+        try {
+            const response = await getArtifacts({
+                q: searchQuery || undefined,
+                size: 20
+            });
+            if (response.data && Array.isArray(response.data.content)) {
+                setArtifacts(response.data.content);
+            }
+        } catch (error) {
+            console.error('Failed to fetch artifacts', error);
+        } finally {
             setIsLoading(false);
-        }, 500);
+        }
     };
 
     useEffect(() => {
-        fetchArtifacts();
+        const timer = setTimeout(() => {
+            fetchArtifacts();
+        }, 300);
+        return () => clearTimeout(timer);
     }, [searchQuery]);
 
-    const handleDelete = (artifactId: number) => {
+    const handleDelete = async (artifactId: number) => {
         if (window.confirm('정말로 이 아티팩트를 삭제하시겠습니까?')) {
-            alert(`아티팩트 ${artifactId} 삭제 요청 (Mock)`);
-            // TODO: Call delete API
+            try {
+                await deleteArtifact(artifactId);
+                fetchArtifacts();
+            } catch (error) {
+                alert('삭제 실패');
+            }
         }
     };
 
@@ -147,10 +150,10 @@ const AdminArtifactPage = () => {
                         artifacts.map((artifact) => (
                             <tr key={artifact.artifactId}>
                                 <Td>{artifact.artifactId}</Td>
-                                <Td>{artifact.title}</Td>
-                                <Td>{artifact.authorNickname}</Td>
+                                <Td>{artifact.artifactTitle}</Td>
+                                <Td>{artifact.nickname}</Td>
                                 <Td>{formatDate(artifact.createdAt)}</Td>
-                                <Td>{artifact.status}</Td>
+                                <Td>{artifact.visibility}</Td>
                                 <Td>
                                     <DeleteButton onClick={() => handleDelete(artifact.artifactId)}>
                                         삭제
