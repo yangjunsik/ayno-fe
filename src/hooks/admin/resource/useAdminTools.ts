@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
-import { getTools, addTool, deleteTool } from '../../api/adminResource';
-import type { Tool } from '../../types/resource';
+import { getTools, addTool, deleteTool } from '../../../api/adminResource';
+import type { Tool } from '../../../types/resource';
 
 export const useAdminTools = () => {
     const [tools, setTools] = useState<Tool[]>([]);

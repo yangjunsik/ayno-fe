@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
-import { getUsers, updateUserStatus } from '../../api/adminUser';
-import type { AdminUserView, UserStatus } from '../../types/adminUser';
+import { getUsers, updateUserStatus } from '../../../api/adminUser';
+import type { AdminUserView, UserStatus } from '../../../types/adminUser';
 
 export const useAdminUsers = () => {
     const [users, setUsers] = useState<AdminUserView[]>([]);

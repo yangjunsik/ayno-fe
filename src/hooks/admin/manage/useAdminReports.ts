@@ -1,8 +1,9 @@
+
 import { useState, useEffect, useCallback } from 'react';
-import { getReports, updateReportStatus } from '../../api/adminReport';
-import { updateUserStatus } from '../../api/adminUser';
-import { deleteArtifact } from '../../api/adminArtifact';
-import type { Report, ReportStatus, TargetType } from '../../types/adminReport';
+import { getReports, updateReportStatus } from '../../../api/adminReport';
+import { updateUserStatus } from '../../../api/adminUser';
+import { deleteArtifact } from '../../../api/adminArtifact';
+import type { Report, ReportStatus, TargetType } from '../../../types/adminReport';
 
 export const useAdminReports = () => {
     const [reports, setReports] = useState<Report[]>([]);
@@ -33,7 +34,7 @@ export const useAdminReports = () => {
     }, [fetchReports]);
 
     const handleStatusChange = async (id: number, newStatus: ReportStatus) => {
-        const memo = window.prompt(`상태를 ${newStatus}로 변경하시겠습니까?\n관리자 메모를 입력해주세요 (선택):`);
+        const memo = window.prompt(`상태를 ${newStatus}로 변경하시겠습니까?\n관리자 메모를 입력해주세요(선택):`);
         if (memo === null) return;
 
         try {
