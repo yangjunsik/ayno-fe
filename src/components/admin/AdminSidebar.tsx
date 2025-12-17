@@ -14,11 +14,11 @@ const SidebarContainer = styled.aside`
 `;
 
 const Logo = styled.div`
-    height: 70px;
+    height: 80px;
     display: flex;
     align-items: center;
     padding-left: 24px;
-    font-size: 20px;
+    font-size: 24px;
     font-weight: 700;
     background: #1a1a1a;
     color: #fff;
