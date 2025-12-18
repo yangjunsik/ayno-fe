@@ -90,13 +90,26 @@ const ContentWrapper = styled.div`
   display: flex;
   flex-direction: column;
 `;
+const EmptyStateContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 400px;
+  width: 100%;
+  color: #888;
+  gap: 16px;
+`;
+
+const EmptyStateMessage = styled.p`
+  font-size: 18px;
+  font-weight: 500;
+`;
 
 import { useNavigate } from 'react-router-dom';
 import { PATH } from '../routes/constants/path';
 import { useMainPage } from '../hooks/useMainPage';
 import Spinner from '../components/common/Spinner';
-
-// ... (styled components)
 
 const MainPage = () => {
   const navigate = useNavigate();
@@ -140,6 +153,11 @@ const MainPage = () => {
             <Spinner />
           ) : error ? (
             <div>{error}</div>
+          ) : flows.length === 0 ? (
+            <EmptyStateContainer>
+              <EmptyStateMessage>아직 등록된 글이 없습니다.</EmptyStateMessage>
+              <p>첫 번째 글의 주인공이 되어보세요!</p>
+            </EmptyStateContainer>
           ) : (
             <Grid key={`${sort}-${currentPage}-${searchKeyword}`}>
               {flows.map(flow => (
@@ -157,7 +175,7 @@ const MainPage = () => {
             </Grid>
           )}
         </ContentWrapper>
-        {!loading && !error && (
+        {!loading && !error && flows.length > 0 && (
           <Pagination
             currentPage={currentPage}
             totalPages={totalPages}
