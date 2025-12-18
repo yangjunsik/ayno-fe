@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { getArtifacts, searchArtifacts } from '../api/artifact';
+import { getArtifacts } from '../api/artifact';
 import type { Artifact } from '../types/artifact';
 
 export const useMainPage = () => {
@@ -14,16 +14,11 @@ export const useMainPage = () => {
     const fetchArtifacts = useCallback(async () => {
         setLoading(true);
         try {
-            let response;
-            if (searchKeyword) {
-                response = await searchArtifacts(searchKeyword, currentPage, 12, sort);
-            } else {
-                response = await getArtifacts(currentPage, 12, sort);
-            }
+            const response = await getArtifacts(searchKeyword, currentPage, 12, sort);
             setFlows(response.data.content);
             setTotalPages(response.data.totalPages);
         } catch (err) {
-            setError('Failed to load artifacts');
+            setError('artifacts 불러오기 실패');
             console.error(err);
         } finally {
             setLoading(false);
@@ -36,12 +31,12 @@ export const useMainPage = () => {
 
     const handleSearch = (keyword: string) => {
         setSearchKeyword(keyword);
-        setCurrentPage(0); // Reset to first page on new search
+        setCurrentPage(0);
     };
 
     const handlePageChange = (page: number) => {
         setCurrentPage(page);
-        window.scrollTo(0, 0); // Scroll to top on page change
+        window.scrollTo(0, 0);
     };
 
     return {
