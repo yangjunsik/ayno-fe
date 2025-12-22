@@ -1,6 +1,8 @@
 import { Global, css } from '@emotion/react';
 
 const style = css`
+  @import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css");
+
   * {
     box-sizing: border-box;
     margin: 0;
@@ -11,8 +13,11 @@ const style = css`
   body {
     width: 100%;
     height: 100%;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
     background-color: #F9FAFB;
+    
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
   ul,
@@ -29,6 +34,7 @@ const style = css`
     cursor: pointer;
     border: none;
     background: none;
+    font-family: inherit;
   }
 `;
 
